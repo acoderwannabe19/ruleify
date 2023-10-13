@@ -79,20 +79,22 @@ const styles = {
   } as CSSProperties,
 };
 
-export default function CSVReader() {
+export default function CSVReader({onListChange} : {onListChange: any}) {
   const { CSVReader } = useCSVReader();
   const [zoneHover, setZoneHover] = useState(false);
   const [removeHoverColor, setRemoveHoverColor] = useState(
     DEFAULT_REMOVE_HOVER_COLOR
   );
-  var list: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined;
+  const [list, setList] = useState(null);
 
   return (
     <CSVReader
       onUploadAccepted={(results: any) => {
         console.log('---------------------------');
-        list =  results["data"][0]
-        console.log(list);
+        const header =  results["data"]
+        console.log(header);
+        setList(header[0]);
+        onListChange(header[0])
         console.log('---------------------------');
         setZoneHover(false);
       }}
@@ -148,10 +150,10 @@ export default function CSVReader() {
                     <Remove color={removeHoverColor} />
                   </div>
                 </div>
-                <div>
+                {/* <div>
 
                   {list}
-                  </div>
+                  </div> */}
               </>
             ) : (
               'Drop CSV file here or click to upload'
