@@ -1,12 +1,35 @@
-// import { useState } from "react";
+import Multiselect from "multiselect-react-dropdown";
+import React, { useState } from "react";
 
-// react component to say hello world ahen a button is clicked
-function HelloWorld() {
-    // const [showMessage, setShowMessage] = useState(false);
-    return (
-        <div>
-            {/* <button onClick={() => setShowMessage(!showMessage)}>Toggle</button> */}
-            <h1 className="text-lg">hoola</h1>
-        </div>
-        )}
-export default HelloWorld;
+const Example = ({options}: {options: any}) => {
+  return (
+    <div>
+      Choose
+      <Multiselect
+        closeIcon="circle"
+        displayValue="key"
+        onKeyPressFn={function noRefCheck() {}}
+        onRemove={function noRefCheck() {}}
+        onSearch={function noRefCheck() {}}
+        onSelect={function noRefCheck() {}}
+        options={options.map((item: any) => ({ key: item }))}
+        placeholder="Custom Placeholder"
+        showCheckbox
+        style={{
+          chips: {
+            background: "#359c90",
+            // 'border-radius': '7px',
+          },
+          multiselectContainer: {
+            color: '#000',
+          },
+          searchBox: {
+            // 'border-radius': '5px',
+          },
+        }}
+      />
+    </div>
+  );
+};
+
+export default Example;

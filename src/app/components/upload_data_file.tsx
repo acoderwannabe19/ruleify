@@ -90,12 +90,9 @@ export default function CSVReader({onListChange} : {onListChange: any}) {
   return (
     <CSVReader
       onUploadAccepted={(results: any) => {
-        console.log('---------------------------');
-        const header =  results["data"]
-        console.log(header);
-        setList(header[0]);
-        onListChange(header[0])
-        console.log('---------------------------');
+        const header =  results["data"][0]
+        setList(header);
+        onListChange(header)
         setZoneHover(false);
       }}
       onDragOver={(event: DragEvent) => {
