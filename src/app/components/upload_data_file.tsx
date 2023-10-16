@@ -1,10 +1,6 @@
 import React, { useState, CSSProperties } from 'react';
 
-import {
-  useCSVReader,
-  lightenDarkenColor,
-  formatFileSize,
-} from 'react-papaparse';
+import { useCSVReader, lightenDarkenColor, formatFileSize } from 'react-papaparse';
 
 const GREY = '#CCC';
 const GREY_LIGHT = 'rgba(255, 255, 255, 0.4)';

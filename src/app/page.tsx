@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import UploadDataFile from "./components/upload_data_file";
 import 'bootstrap/dist/css/bootstrap.css'
 import Example from "./components/test";
@@ -8,6 +8,33 @@ import Example from "./components/test";
 
 export default function Page() {
   const [list, setList] = useState<any[]>([]);
+
+  const [selectedRule, setSelectedRule] = useState('');
+
+  const [noLimit, setNoLimit] = useState(-1); // Initialize noLimit with -1
+
+  // Event handler to update the selected item when the user makes a selection
+  const handleSelectChange = (event: { target: { value: any; }; }) => {
+    const rule = event.target.value;
+    setSelectedRule(rule);
+    // Check if the selected rule is in list_column_hint
+    if (list_column_hint.includes(rule) || 
+    list_column_assert_binning_udf_max_bin_hint.includes(rule) || 
+    list_column_assert_hint.includes(rule) || 
+    list_column_datatype_assert_hint.includes(rule) || 
+    list_column_quantile_assert_hint.includes(rule) || 
+    list_column_pattern_assert_name_hint.includes(rule) || 
+    list_column_allowed_values_assert_hint.includes(rule)
+    ) {
+      setNoLimit(1);
+    } else if (list_column_column_assert_hint.includes(rule)) {
+      setNoLimit(2);
+    }
+    else {
+      setNoLimit(-1);
+    }
+  };
+
   
   const rules_list = ["areComplete", "areAnyComplete", "hasApproxCountDistinct", "containsURL", "containsSocialSecurityNumber", 
   "containsEmail", "containsCreditCardNumber", "hasCompleteness", "hasEntropy", "hasMax", "hasMaxLength", "hasMean", "hasMin",
@@ -48,21 +75,14 @@ export default function Page() {
     <div className="row">
       <div className="col-12 col-lg-4">
         <label>Choose a rule:</label>
-        <select className="form-select" name="" id="">
+        <select className="form-select" value={selectedRule} onChange={handleSelectChange} name="" id="">
           <option value="">Please choose a rule:</option>
           {rules_list && rules_list.map((item, index) => (
               <option key={index} value={item}>{item}</option>
             ))}        </select>
       </div>
       <div className="col-12 col-lg-4">
-        {/* <label htmlFor="pet-select">Choose column:</label>
-          <select className="form-select" name="pets"  id="pet-select">
-            <option value="">--Please choose an option--</option>
-            {list && list.map((item, index) => (
-              <option key={index} value={item}>{item}</option>
-            ))}
-          </select> */}
-          <Example options={list} />
+          <Example noLimit={noLimit} options={list} />
       </div>
       <div className="col-12 col-lg-4">
         <label htmlFor="pet-select">Choose an assertion:</label>

@@ -1,7 +1,7 @@
 import Multiselect from "multiselect-react-dropdown";
-import React, { useState } from "react";
+import React from "react";
 
-const Example = ({options}: {options: any}) => {
+const Example = ({options, noLimit}: {options: any, noLimit: any}) => {
   return (
     <div>
       Choose
@@ -14,6 +14,7 @@ const Example = ({options}: {options: any}) => {
         onSelect={function noRefCheck() {}}
         options={options.map((item: any) => ({ key: item }))}
         placeholder="Custom Placeholder"
+        selectionLimit={noLimit}
         showCheckbox
         style={{
           chips: {
