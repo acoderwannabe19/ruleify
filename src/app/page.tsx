@@ -3,7 +3,8 @@
 import { SetStateAction, useState } from "react";
 import UploadDataFile from "./components/upload_data_file";
 import 'bootstrap/dist/css/bootstrap.css'
-import Example from "./components/test";
+import Example from "./components/column_selector";
+import ColumnSelector from "./components/column_selector";
 
 
 export default function Page() {
@@ -70,7 +71,7 @@ export default function Page() {
 
 
   
-  return <div className="m-4">
+  return <div className="m-4" style={{fontFamily: 'Montserrat'}}>
     <UploadDataFile onListChange={setList} />
     <div className="row">
       <div className="col-12 col-lg-4">
@@ -82,7 +83,7 @@ export default function Page() {
             ))}        </select>
       </div>
       <div className="col-12 col-lg-4">
-          <Example noLimit={noLimit} options={list} />
+          <ColumnSelector noLimit={noLimit} options={list} />
       </div>
       <div className="col-12 col-lg-4">
         <label htmlFor="pet-select">Choose an assertion:</label>

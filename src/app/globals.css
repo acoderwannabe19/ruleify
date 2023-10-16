@@ -16,12 +16,21 @@
   }
 }
 
-/* body {
-  color: rgb(var(--foreground-rgb));
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../app/assets/fonts/Montserrat/Montserrat-Light.ttf');
+  /* src: url('../asset/OpenSans/OpenSans-Medium.ttf'); */
+  /* font-weight: 400;
+  font-style: normal; */
+  }
+
+body {
+  font-family: Montserrat;
+  /* color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
-    rgb(var(--background-start-rgb));
-} */
+    rgb(var(--background-start-rgb)); */
+}

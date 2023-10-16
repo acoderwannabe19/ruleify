@@ -1,9 +1,10 @@
 import Multiselect from "multiselect-react-dropdown";
+import { Montserrat } from "next/font/google";
 import React from "react";
 
-const Example = ({options, noLimit}: {options: any, noLimit: any}) => {
+const ColumnSelector = ({options, noLimit}: {options: any, noLimit: any}) => {
   return (
-    <div>
+    <div >
       Choose
       <Multiselect
         closeIcon="circle"
@@ -13,19 +14,20 @@ const Example = ({options, noLimit}: {options: any, noLimit: any}) => {
         onSearch={function noRefCheck() {}}
         onSelect={function noRefCheck() {}}
         options={options.map((item: any) => ({ key: item }))}
-        placeholder="Custom Placeholder"
+        placeholder="Find"
         selectionLimit={noLimit}
         showCheckbox
         style={{
           chips: {
-            background: "#359c90",
-            // 'border-radius': '7px',
+            background: "#359c90",          
+            borderRadius: "3px",
           },
           multiselectContainer: {
             color: '#000',
+            // fontFamily: 'Montserrat'
           },
           searchBox: {
-            // 'border-radius': '5px',
+            borderRadius: '5px',
           },
         }}
       />
@@ -33,4 +35,4 @@ const Example = ({options, noLimit}: {options: any, noLimit: any}) => {
   );
 };
 
-export default Example;
+export default ColumnSelector;
