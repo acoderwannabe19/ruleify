@@ -13,7 +13,7 @@ export default function Page() {
   };
 
   return (
-    <div className="p-5">
+    <div className="p-5" >
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
         <RuleCreator key={index} columns={list} />
@@ -25,5 +25,6 @@ export default function Page() {
         <button className="btn btn-outline-success m-3">Save rules file</button>
       </div>
     </div>
+    
   );
 }
