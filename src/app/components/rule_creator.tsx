@@ -70,7 +70,7 @@ export default function RuleCreator({columns}: {columns: any}) {
 
 
   
-  return <div className="m-4" style={{fontFamily: 'Montserrat'}}>
+  return <div className="m-4" >
     {/* <UploadDataFile onListChange={setList} /> */}
     <div className="row">
       <div className="col-12 col-lg-4">

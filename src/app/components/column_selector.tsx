@@ -5,7 +5,7 @@ import React from "react";
 const ColumnSelector = ({options, noLimit}: {options: any, noLimit: any}) => {
   return (
     <div >
-      Choose a column
+      Choose column(s)
       <Multiselect
       
         closeIcon="circle"

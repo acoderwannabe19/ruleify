@@ -12,8 +12,42 @@ export default function Page() {
     setRuleCount(ruleCount + 1);
   };
 
+  function saveRulesToFile(rules: any[]) {
+    const jsonStructure = {
+      checks: rules.map((rule) => ({
+        check: {
+          assertion: rule.assertion,
+          rule: rule.rule,
+        },
+      })),
+    };
+  
+    const jsonData = JSON.stringify(jsonStructure);
+  
+    // Create a Blob object with the JSON data
+    const blob = new Blob([jsonData], { type: 'application/json' });
+  
+    // Create a temporary URL for the Blob
+    const url = URL.createObjectURL(blob);
+  
+    // Create a link element to trigger the download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rules.json';
+  
+    // Simulate a click to trigger the download
+    a.click();
+  
+    // Clean up by revoking the object URL
+    URL.revokeObjectURL(url);
+  }
+  
+  
+
   return (
-    <div className="p-5" >
+    <div className="p-5" style={{fontFamily: 'Montserrat'}} >
+      <title>Ruleify</title>
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
         <RuleCreator key={index} columns={list} />
@@ -22,7 +56,7 @@ export default function Page() {
         <button className="btn btn-outline-success m-3" onClick={addRule}>
           + Add a rule
         </button>
-        <button className="btn btn-outline-success m-3">Save rules file</button>
+        <button onClick={() => saveRulesToFile(list)} className="btn btn-outline-success m-3">Save rules file</button>
       </div>
     </div>
     
