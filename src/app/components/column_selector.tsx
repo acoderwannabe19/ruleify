@@ -5,8 +5,9 @@ import React from "react";
 const ColumnSelector = ({options, noLimit}: {options: any, noLimit: any}) => {
   return (
     <div >
-      Choose
+      Choose a column
       <Multiselect
+      
         closeIcon="circle"
         displayValue="key"
         onKeyPressFn={function noRefCheck() {}}
@@ -14,7 +15,7 @@ const ColumnSelector = ({options, noLimit}: {options: any, noLimit: any}) => {
         onSearch={function noRefCheck() {}}
         onSelect={function noRefCheck() {}}
         options={options.map((item: any) => ({ key: item }))}
-        placeholder="Find"
+        placeholder="Search"
         selectionLimit={noLimit}
         showCheckbox
         style={{
