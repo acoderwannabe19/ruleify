@@ -2,15 +2,8 @@ import { log } from "console";
 import Multiselect from "multiselect-react-dropdown";
 import React, { useState } from "react";
 
-const ColumnSelector = ({ options, noLimit }: { options: any; noLimit: any }) => {
-  // Utilisez l'état pour stocker les options sélectionnées
-  const [selectedCols, setSelectedCols] = useState([]);
-
-  // Une fonction pour gérer la mise à jour des options sélectionnées
-  const handleSelect = (selectedList: any) => {
-    console.log(selectedList);
-    setSelectedCols(selectedList);
-  };
+const ColumnSelector = ({ options, noLimit, selectedCols, handler }: { options: any; noLimit: any, selectedCols:any, handler: any }) => {
+ 
 
   return (
     <div>
@@ -23,7 +16,7 @@ const ColumnSelector = ({ options, noLimit }: { options: any; noLimit: any }) =>
         onSearch={function noRefCheck() {}}
         options={options.map((item: any) => ({ key: item }))}
         selectedValues={selectedCols} // Utilisez selectedValues pour afficher les options sélectionnées
-        onSelect={handleSelect} // Utilisez onSelect pour gérer la sélection
+        onSelect={handler} // Utilisez onSelect pour gérer la sélection
         placeholder="Search"
         selectionLimit={noLimit}
         showCheckbox

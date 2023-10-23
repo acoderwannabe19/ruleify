@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import ColumnSelector from "../components/column_selector";
 
 
-export default function RuleCreator({columns}: {columns: any}) {
+export default function RuleCreator({columns, selectedCols, handleColSelection}: {columns: any, selectedCols: any, handleColSelection: any }) {
   // const [list, setList] = useState<any[]>([]);
 
   const [selectedRule, setSelectedRule] = useState('');
@@ -82,19 +82,19 @@ export default function RuleCreator({columns}: {columns: any}) {
             ))}        </select>
       </div>
       <div className="col-12 col-lg-4">
-          <ColumnSelector noLimit={noLimit} options={columns} />
+          <ColumnSelector selectedCols={selectedCols} handler={handleColSelection} noLimit={noLimit} options={columns} />
       </div>
       <div className="col-12 col-lg-4 row">
         <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
           <div className="col">
             <select className="form-select" name="pets" id="pet-select">
               {/* <option value="">--Choose an assertion--</option> */}
+              <option > None </option>
               <option> &gt; </option>
               <option> &gt;= </option>
               <option> &lt; </option>
               <option> &lt;= </option>
               <option> = </option>
-              <option > None </option>
 
             </select>
           </div>
