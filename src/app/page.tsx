@@ -12,16 +12,11 @@ export default function Page() {
     setRuleCount(ruleCount + 1);
   };
 
-  function saveRulesToFile(rules: any[]) {
+  function saveRulesToFile(ruleCount: number) {
     const jsonStructure = {
-      checks: rules.map((rule) => ({
-        check: {
-          assertion: rule.assertion,
-          rule: rule.rule,
-        },
-      })),
+      checks: [],
     };
-  
+
     const jsonData = JSON.stringify(jsonStructure);
   
     // Create a Blob object with the JSON data
@@ -56,7 +51,7 @@ export default function Page() {
         <button className="btn btn-outline-success m-3" onClick={addRule}>
           + Add a rule
         </button>
-        <button onClick={() => saveRulesToFile(list)} className="btn btn-outline-success m-3">Save rules file</button>
+        <button onClick={() => saveRulesToFile(ruleCount)} className="btn btn-outline-success m-3">Save rules file</button>
       </div>
     </div>
     
