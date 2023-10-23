@@ -3,26 +3,29 @@ import React, { useState } from "react";
 import UploadDataFile from "./components/upload_data_file";
 import "bootstrap/dist/css/bootstrap.css";
 import RuleCreator from "./components/rule_creator";
+import { log } from "console";
 
 export default function Page() {
   const [list, setList] = useState([]);
   const [ruleCount, setRuleCount] = useState(1); // Initial count of RuleCreators
+   // Utilisez l'état pour stocker les options sélectionnées
+  const [selectedCols, setSelectedCols] = useState<any[]>([]);
+  let jsonStructure: any;
+
+  // Une fonction pour gérer la mise à jour des options sélectionnées
+  const handleSelectColumns = (selectedList: any) => {
+    setSelectedCols(selectedList);
+  };
 
   const addRule = () => {
     setRuleCount(ruleCount + 1);
   };
 
-  function saveRulesToFile(rules: any[]) {
+  function saveRulesToFile(ruleCount: number) {
     const jsonStructure = {
-      checks: rules.map((rule) => ({
-        check: {
-          assertion: rule.assertion,
-          rule: rule.rule, 
-
-        },
-      })),
+      checks: [],
     };
-  
+
     const jsonData = JSON.stringify(jsonStructure);
   
     // Create a Blob object with the JSON data
@@ -51,13 +54,13 @@ export default function Page() {
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator key={index} columns={list} />
+        <RuleCreator key={index} columns={list} selectedCols={selectedCols} handleColSelection={handleSelectColumns} />
       ))}
       <div className="flex justify-center">
         <button className="btn btn-outline-success m-3" onClick={addRule}>
           + Add a rule
         </button>
-        <button onClick={() => saveRulesToFile(list)} className="btn btn-outline-success m-3">Save rules file</button>
+        <button onClick={() => saveRulesToFile(ruleCount)} className="btn btn-outline-success m-3">Save rules file</button>
       </div>
     </div>
     
