@@ -17,11 +17,12 @@ export default function Page() {
       checks: rules.map((rule) => ({
         check: {
           assertion: rule.assertion,
-          rule: rule.rule,
+          rule: rule.rule, 
+
         },
       })),
     };
-    
+  
     const jsonData = JSON.stringify(jsonStructure);
   
     // Create a Blob object with the JSON data
@@ -41,6 +42,8 @@ export default function Page() {
     // Clean up by revoking the object URL
     URL.revokeObjectURL(url);
   }
+  
+  
 
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
@@ -51,9 +54,12 @@ export default function Page() {
         <RuleCreator key={index} columns={list} />
       ))}
       <div className="flex justify-center">
-        <button className="btn btn-outline-success m-3" onClick={addRule}>+ Add a rule</button>
+        <button className="btn btn-outline-success m-3" onClick={addRule}>
+          + Add a rule
+        </button>
         <button onClick={() => saveRulesToFile(list)} className="btn btn-outline-success m-3">Save rules file</button>
       </div>
     </div>
+    
   );
 }
