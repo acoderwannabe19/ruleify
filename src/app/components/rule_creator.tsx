@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from "react";
-import UploadDataFile from "../components/upload_data_file";
 import 'bootstrap/dist/css/bootstrap.css'
 import ColumnSelector from "../components/column_selector";
 
@@ -43,17 +42,17 @@ export default function RuleCreator({columns}: {columns: any}) {
   "hasMutualInformation", "isGreaterThan", "isGreaterThanOrEqualTo", "isLessThan", "isLessThanOrEqualTo", "isContainedIn", 
   "hasPattern", "hasDataType", "hasHistogramValues", "hasNumberOfDistinctValues"]
 
-  const list_columns = ["areComplete", "areAnyComplete"]
+  // const list_columns = ["areComplete", "areAnyComplete"]
 
   const list_column_assert_hint = ["hasApproxCountDistinct", "containsURL", "containsSocialSecurityNumber", "containsEmail",
   "containsCreditCardNumber", "hasCompleteness", "hasEntropy", "hasMax", "hasMaxLength", "hasMean", "hasMin", "hasMinLength", 
   "hasStandardDeviation", "hasSum", "isPositive", "isNonNegative"]
 
-  const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"]
+  // const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"]
 
   const list_column_hint = ["isUnique", "isComplete"]
 
-  const list_assert_hint = ["hasSize"]
+  // const list_assert_hint = ["hasSize"]
 
   const list_column_quantile_assert_hint = ["hasApproxQuantile"]
 
@@ -68,15 +67,12 @@ export default function RuleCreator({columns}: {columns: any}) {
 
   const list_column_assert_binning_udf_max_bin_hint = ["hasHistogramValues", "hasNumberOfDistinctValues"]
 
-
   
-  return <div className="m-4" >
-    {/* <UploadDataFile onListChange={setList} /> */}
+  return <div className="m-4">
     <div className="row">
       <div className="col-12 col-lg-4">
         <label>Choose a rule:</label>
         <select className="form-select" value={selectedRule} onChange={handleSelectChange} name="" id="">
-          {/* <option value="">Choose a rule:</option> */}
           {rules_list && rules_list.map((item, index) => (
               <option key={index} value={item}>{item}</option>
             ))}        </select>
@@ -88,14 +84,12 @@ export default function RuleCreator({columns}: {columns: any}) {
         <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
           <div className="col">
             <select className="form-select" name="pets" id="pet-select">
-              {/* <option value="">--Choose an assertion--</option> */}
               <option> &gt; </option>
               <option> &gt;= </option>
               <option> &lt; </option>
               <option> &lt;= </option>
               <option> = </option>
               <option > None </option>
-
             </select>
           </div>
           <div className="col">
@@ -103,10 +97,5 @@ export default function RuleCreator({columns}: {columns: any}) {
           </div>
       </div>
     </div>
-    {/* <div className="flex justify-center p-5">
-      <button className="btn btn-outline-success m-3" > + Add a rule</button>
-      <button className="btn btn-outline-success m-3" > Save rules file</button>
-
-      </div> */}
     </div>
 }
