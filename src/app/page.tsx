@@ -3,48 +3,76 @@ import React, { useState } from "react";
 import UploadDataFile from "./components/upload_data_file";
 import "bootstrap/dist/css/bootstrap.css";
 import RuleCreator from "./components/rule_creator";
-import { log } from "console";
 
 export default function Page() {
   const [list, setList] = useState([]);
   const [ruleCount, setRuleCount] = useState(1); // Initial count of RuleCreators
    // Utilisez l'état pour stocker les options sélectionnées
-  const [selectedCols, setSelectedCols] = useState<any[]>([]);
-  let jsonStructure: any;
+  
+  const [selectedCols, setSelectedCols] = useState<any>([[]]);
+  let jsonStructure = {"check" : {}};
+  let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
 
   // Une fonction pour gérer la mise à jour des options sélectionnées
-  const handleSelectColumns = (selectedList: any) => {
-    setSelectedCols(selectedList);
+  const handleSelectColumns = (selectedList: any, index: any) => {
+    const updatedSelectedCols = [...selectedCols];
+    updatedSelectedCols[index] = selectedList;
+    setSelectedCols(updatedSelectedCols);
   };
 
   const addRule = () => {
     setRuleCount(ruleCount + 1);
+    setSelectedCols([...selectedCols, []])    
   };
 
   function saveRulesToFile() {
     let cols = [];
-    if (selectedCols.length == 1) {
+    if(ruleCount == 1){
+      if (selectedCols[0].length == 1) {
       jsonStructure = {
-        checks:[{
           check: {
-            column: selectedCols[0].key
+            "column": selectedCols[0][0]["key"]
+            
           }
+        };
+        finalJsonStructure.checks.push(jsonStructure);
+      }else {
+        for (let index = 0; index < selectedCols[0].length; index++) {
+          cols.push(selectedCols[0][index]["key"])
         }
-      ]}
+        jsonStructure = {
+            check: {
+              "columns": JSON.stringify(cols)
+            }
+          };
+        finalJsonStructure.checks.push(jsonStructure);
+      }
+  }else {
+    for (let list = 0; list < selectedCols.length; list++) {
+    
+    if (selectedCols[list].length == 1) {
+      jsonStructure = {
+          check: {
+            "column": selectedCols[list][0]["key"]
+          }
+        };
+        finalJsonStructure.checks.push(jsonStructure);
+
     }else {
       for (let index = 0; index < selectedCols.length; index++) {
-        cols.push(selectedCols[index].key)
+        cols.push(selectedCols[list][index]["key"])
       }
       jsonStructure = {
-        checks:[{
           check: {
-            columns: JSON.stringify(cols)
+            "columns": JSON.stringify(cols)
           }
-        }
-      ]}
-    }
+        };
+        finalJsonStructure.checks.push(jsonStructure);
+    }}
+  }
 
-    const jsonData = JSON.stringify(jsonStructure);
+
+    const jsonData = JSON.stringify(finalJsonStructure);
   
     // Create a Blob object with the JSON data
     const blob = new Blob([jsonData], { type: 'application/json' });
@@ -72,7 +100,9 @@ export default function Page() {
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator key={index} columns={list} selectedCols={selectedCols} handleColSelection={handleSelectColumns} />
+        <RuleCreator  key={index} columns={list} selectedCols={selectedCols[index]} handleColSelection={(selectedList:any) =>
+          handleSelectColumns(selectedList, index)
+        } />
       ))}
       <div className="flex justify-center">
         <button className="btn btn-outline-success m-3" onClick={addRule}>

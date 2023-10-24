@@ -3,6 +3,7 @@
 import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css'
 import ColumnSelector from "../components/column_selector";
+import AssertionSelector from "./assertion_selector";
 
 
 export default function RuleCreator({columns, selectedCols, handleColSelection}: {columns: any, selectedCols: any, handleColSelection: any }) {
@@ -12,10 +13,14 @@ export default function RuleCreator({columns, selectedCols, handleColSelection}:
 
   const [noLimit, setNoLimit] = useState(-1); // Initialize noLimit with -1
 
+  const [isAssertion, setIsAssertion] = useState(false)
   // Event handler to update the selected item when the user makes a selection
-  const handleSelectChange = (event: { target: { value: any; }; }) => {
+  const handleSelectRule = (event: { target: { value: any; }; }) => {
     const rule = event.target.value;
     setSelectedRule(rule);
+    if (list_column_hint.includes(rule)) {
+      setIsAssertion(true)     
+    }
     // Check if the selected rule is in list_column_hint
     if (list_column_hint.includes(rule) || 
     list_column_assert_binning_udf_max_bin_hint.includes(rule) || 
@@ -72,32 +77,20 @@ export default function RuleCreator({columns, selectedCols, handleColSelection}:
     <div className="row">
       <div className="col-12 col-lg-4">
         <label>Choose a rule:</label>
-        <select className="form-select" value={selectedRule} onChange={handleSelectChange} name="" id="">
+        <select className="form-select" value={selectedRule} onChange={handleSelectRule} name="" id="">
           {rules_list && rules_list.map((item, index) => (
               <option key={index} value={item}>{item}</option>
             ))}        </select>
       </div>
       <div className="col-12 col-lg-4">
-          <ColumnSelector selectedCols={selectedCols} handleSelectedCols={handleColSelection}  noLimit={noLimit} options={columns} />
+      <ColumnSelector selectedCols={selectedCols} handleSelectedCols={handleColSelection}  noLimit={noLimit} options={columns} /> 
       </div>
       <div className="col-12 col-lg-4 row">
-        <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
-          <div className="col">
-            <select className="form-select" name="pets" id="pet-select">
-              {/* <option value="">--Choose an assertion--</option> */}
-              <option> &gt; </option>
-              <option> &gt;= </option>
-              <option> &lt; </option>
-              <option> &lt;= </option>
-              <option> = </option>
-              <option > None </option>
+      <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
 
-            </select>
-          </div>
-          <div className="col">
-            <input  type="number" className="form-control" ></input>
-          </div>
-      </div>
+        <AssertionSelector isDisabled={isAssertion}   />
+          
+    </div>
     </div>
     </div>
 }
