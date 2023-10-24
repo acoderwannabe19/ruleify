@@ -2,15 +2,8 @@ import Multiselect from "multiselect-react-dropdown";
 import { Montserrat } from "next/font/google";
 import React, { useState } from "react";
 
-const ColumnSelector = ({ options, noLimit }: { options: any; noLimit: any }) => {
-  // Utilisez l'état pour stocker les options sélectionnées
-  const [selectedCols, setSelectedCols] = useState([]);
+const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols  }: { options: any; noLimit: any; selectedCols: any; handleSelectedCols: any }) => {
 
-  // Une fonction pour gérer la mise à jour des options sélectionnées
-  const handleSelect = (selectedList: any) => {
-    console.log(selectedList);
-    setSelectedCols(selectedList);
-  };
 
   return (
     <div >
@@ -25,7 +18,7 @@ const ColumnSelector = ({ options, noLimit }: { options: any; noLimit: any }) =>
         // onSelect={function noRefCheck() {}}
         options={options.map((item: any) => ({ key: item }))}
         selectedValues={selectedCols} // Utilisez selectedValues pour afficher les options sélectionnées
-        onSelect={handleSelect} // Utilisez onSelect pour gérer la sélection
+        onSelect={handleSelectedCols} // Utilisez onSelect pour gérer la sélection
         placeholder="Search"
         selectionLimit={noLimit}
         showCheckbox

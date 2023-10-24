@@ -21,10 +21,28 @@ export default function Page() {
     setRuleCount(ruleCount + 1);
   };
 
-  function saveRulesToFile(ruleCount: number) {
-    const jsonStructure = {
-      checks: [],
-    };
+  function saveRulesToFile() {
+    let cols = [];
+    if (selectedCols.length == 1) {
+      jsonStructure = {
+        checks:[{
+          check: {
+            column: selectedCols[0].key
+          }
+        }
+      ]}
+    }else {
+      for (let index = 0; index < selectedCols.length; index++) {
+        cols.push(selectedCols[index].key)
+      }
+      jsonStructure = {
+        checks:[{
+          check: {
+            columns: JSON.stringify(cols)
+          }
+        }
+      ]}
+    }
 
     const jsonData = JSON.stringify(jsonStructure);
   
@@ -60,7 +78,7 @@ export default function Page() {
         <button className="btn btn-outline-success m-3" onClick={addRule}>
           + Add a rule
         </button>
-        <button onClick={() => saveRulesToFile(ruleCount)} className="btn btn-outline-success m-3">Save rules file</button>
+        <button onClick={saveRulesToFile} className="btn btn-outline-success m-3">Save rules file</button>
       </div>
     </div>
     

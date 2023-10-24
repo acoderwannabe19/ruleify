@@ -78,7 +78,7 @@ export default function RuleCreator({columns, selectedCols, handleColSelection}:
             ))}        </select>
       </div>
       <div className="col-12 col-lg-4">
-          <ColumnSelector  noLimit={noLimit} options={columns} />
+          <ColumnSelector selectedCols={selectedCols} handleSelectedCols={handleColSelection}  noLimit={noLimit} options={columns} />
       </div>
       <div className="col-12 col-lg-4 row">
         <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
