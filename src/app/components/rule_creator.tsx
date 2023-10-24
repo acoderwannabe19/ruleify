@@ -83,7 +83,7 @@ export default function RuleCreator({columns, selectedCols, handleColSelection}:
       <div className="col-12 col-lg-4 row">
         <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
           <div className="col">
-            <select className="form-select" name="pets" id="pet-select">
+            <select disabled className="form-select" name="pets" id="pet-select">
               {/* <option value="">--Choose an assertion--</option> */}
               <option> &gt; </option>
               <option> &gt;= </option>
