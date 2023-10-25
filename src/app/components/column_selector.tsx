@@ -1,6 +1,5 @@
 import Multiselect from "multiselect-react-dropdown";
-import { Montserrat } from "next/font/google";
-import React, { useState } from "react";
+import React from "react";
 
 const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols  }: { options: any; noLimit: any; selectedCols: any; handleSelectedCols: any }) => {
 
@@ -9,7 +8,6 @@ const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols  }:
     <div >
       Choose column(s)
       <Multiselect
-      
         closeIcon="circle"
         displayValue="key"
         onKeyPressFn={function noRefCheck() {}}

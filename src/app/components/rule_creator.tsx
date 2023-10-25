@@ -6,7 +6,7 @@ import ColumnSelector from "../components/column_selector";
 import AssertionSelector from "./assertion_selector";
 
 
-export default function RuleCreator({columns, selectedCols, handleColSelection}: {columns: any, selectedCols: any, handleColSelection: any }) {
+export default function RuleCreator({columns, selectedCols, handleColSelection, selectedOperator, selectedValue, handleOperatorSelection, handleValueSelection, isValueDisabled}: {columns: any, selectedCols: any, handleColSelection: any, selectedOperator : any, handleOperatorSelection : any, selectedValue : any, handleValueSelection : any, isValueDisabled: any}) {
   // const [list, setList] = useState<any[]>([]);
 
   const [selectedRule, setSelectedRule] = useState('');
@@ -14,6 +14,10 @@ export default function RuleCreator({columns, selectedCols, handleColSelection}:
   const [noLimit, setNoLimit] = useState(-1); // Initialize noLimit with -1
 
   const [isAssertion, setIsAssertion] = useState(false)
+
+  // const [isValueDisabled, setIsValueDisabled] = useState<any>(true)
+
+
   // Event handler to update the selected item when the user makes a selection
   const handleSelectRule = (event: { target: { value: any; }; }) => {
     const rule = event.target.value;
@@ -83,12 +87,12 @@ export default function RuleCreator({columns, selectedCols, handleColSelection}:
             ))}        </select>
       </div>
       <div className="col-12 col-lg-4">
-      <ColumnSelector selectedCols={selectedCols} handleSelectedCols={handleColSelection}  noLimit={noLimit} options={columns} /> 
+      <ColumnSelector selectedCols={selectedCols} handleSelectedCols={handleColSelection}   noLimit={noLimit} options={columns} /> 
       </div>
       <div className="col-12 col-lg-4 row">
       <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
 
-        <AssertionSelector isDisabled={isAssertion}   />
+        <AssertionSelector isValueDisabled={isValueDisabled} operatorSelection={selectedOperator} valueSelection={selectedValue} handleOperatorSelection={handleOperatorSelection} handleValueSelection={handleValueSelection} isDisabled={isAssertion}   />
           
     </div>
     </div>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import UploadDataFile from "./components/upload_data_file";
 import "bootstrap/dist/css/bootstrap.css";
 import RuleCreator from "./components/rule_creator";
+import { log } from "console";
 
 export default function Page() {
   const [list, setList] = useState([]);
@@ -10,6 +11,11 @@ export default function Page() {
    // Utilisez l'état pour stocker les options sélectionnées
   
   const [selectedCols, setSelectedCols] = useState<any>([[]]);
+  const [selectedOperator, setSelectedOperator] = useState<any>(["None"])
+  const [selectedValue, setSelectedValue] = useState<any>([0])
+  const [selectedAssertion, setSelectedAssertion] = useState<any>([""])
+  const [isValueDisabled, setIsValueDisabled] = useState<any>([true])
+
   let jsonStructure = {"check" : {}};
   let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
 
@@ -20,10 +26,46 @@ export default function Page() {
     setSelectedCols(updatedSelectedCols);
   };
 
+  const handleSelectValue = (selected : any, index: any) => {
+    const updatedSelectedValue = [...selectedValue];
+    updatedSelectedValue[index] = selected.target.value;
+    setSelectedValue(updatedSelectedValue);   
+  }
+
+  const handleSelectOperator = (selected : any, index: any) => {
+    const updatedSelectedOperator = [...selectedOperator];
+    updatedSelectedOperator[index] = selected.target.value;
+    setSelectedOperator(updatedSelectedOperator);    
+
+    if (updatedSelectedOperator[index] != "None") {      
+      const updatedIsValueDisabled = [...isValueDisabled];    
+      updatedIsValueDisabled[index] = false;
+      setIsValueDisabled(updatedIsValueDisabled);
+    }
+  }
+
+
   const addRule = () => {
     setRuleCount(ruleCount + 1);
-    setSelectedCols([...selectedCols, []])    
+
+    setSelectedCols([...selectedCols, []]) 
+
+    setSelectedOperator([...selectedOperator, "None"]) 
+    console.log(selectedOperator);
+    
+    
+    setSelectedValue([...selectedValue, 0]) 
+    console.log(selectedValue);
+
+    setSelectedAssertion([...selectedAssertion, ""])
+
+    setIsValueDisabled([...isValueDisabled, true])
+    
   };
+
+  function writeRule(list:any) {
+    
+  }
 
   function saveRulesToFile() {
     let cols = [];
@@ -32,7 +74,6 @@ export default function Page() {
       jsonStructure = {
           check: {
             "column": selectedCols[0][0]["key"]
-            
           }
         };
         finalJsonStructure.checks.push(jsonStructure);
@@ -100,7 +141,7 @@ export default function Page() {
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator  key={index} columns={list} selectedCols={selectedCols[index]} handleColSelection={(selectedList:any) =>
+        <RuleCreator isValueDisabled={isValueDisabled[index]} selectedOperator={selectedOperator[index]} selectedValue={selectedValue[index]}  handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  key={index} columns={list} selectedCols={selectedCols[index]} handleColSelection={(selectedList:any) =>
           handleSelectColumns(selectedList, index)
         } />
       ))}
