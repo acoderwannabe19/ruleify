@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import UploadDataFile from "./components/upload_data_file";
 import "bootstrap/dist/css/bootstrap.css";
 import RuleCreator from "./components/rule_creator";
-import { log } from "console";
 
 export default function Page() {
   const [list, setList] = useState([]);
@@ -15,9 +14,41 @@ export default function Page() {
   const [selectedValue, setSelectedValue] = useState<any>([0])
   const [selectedAssertion, setSelectedAssertion] = useState<any>([""])
   const [isValueDisabled, setIsValueDisabled] = useState<any>([true])
+  const [selectedRule, setSelectedRule] = useState<any>([])
+
+  const [noLimit, setNoLimit] = useState(-1); // Initialize noLimit with -1
+
+  const [isAssertion, setIsAssertion] = useState(false)
 
   let jsonStructure = {"check" : {}};
   let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
+
+  
+  // const list_columns = ["areComplete", "areAnyComplete"]
+
+  const list_column_assert_hint = ["hasApproxCountDistinct", "containsURL", "containsSocialSecurityNumber", "containsEmail",
+  "containsCreditCardNumber", "hasCompleteness", "hasEntropy", "hasMax", "hasMaxLength", "hasMean", "hasMin", "hasMinLength", 
+  "hasStandardDeviation", "hasSum", "isPositive", "isNonNegative"]
+
+  // const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"]
+
+  const list_column_hint = ["isUnique", "isComplete"]
+
+  // const list_assert_hint = ["hasSize"]
+
+  const list_column_quantile_assert_hint = ["hasApproxQuantile"]
+
+  const list_column_column_assert_hint = ["hasCorrelation", "hasMutualInformation", "isGreaterThan", "isGreaterThanOrEqualTo", 
+  "isLessThan", "isLessThanOrEqualTo"]
+
+  const list_column_allowed_values_assert_hint = ["isContainedIn"]
+
+  const list_column_pattern_assert_name_hint = ["hasPattern"]
+
+  const list_column_datatype_assert_hint = ["hasDataType"]
+
+  const list_column_assert_binning_udf_max_bin_hint = ["hasHistogramValues", "hasNumberOfDistinctValues"]
+
 
   // Une fonction pour gérer la mise à jour des options sélectionnées
   const handleSelectColumns = (selectedList: any, index: any) => {
@@ -29,8 +60,45 @@ export default function Page() {
   const handleSelectValue = (selected : any, index: any) => {
     const updatedSelectedValue = [...selectedValue];
     updatedSelectedValue[index] = selected.target.value;
-    setSelectedValue(updatedSelectedValue);   
+    setSelectedValue(updatedSelectedValue);
+       
   }
+
+  // const handleSelectRule = (selected : any, index: any) => {
+  //   const updatedSelectedRule = [...selectedRule];
+  //   updatedSelectedRule[index] = selected.target.value;
+  //   setSelectedRule(updatedSelectedRule);   
+  // }
+
+  const handleSelectRule = (selected : any, index: any) => {
+    const updatedSelectedRule = [...selectedRule];
+    updatedSelectedRule[index] = selected.target.value;
+    setSelectedRule(updatedSelectedRule);
+    // console.log(selectedRule);
+
+    const rule = selected.target.value;
+    // setSelectedRule(rule);
+    if (list_column_hint.includes(rule)) {
+      setIsAssertion(true)     
+    }
+    // Check if the selected rule is in list_column_hint
+    if (list_column_hint.includes(rule) || 
+    list_column_assert_binning_udf_max_bin_hint.includes(rule) || 
+    list_column_assert_hint.includes(rule) || 
+    list_column_datatype_assert_hint.includes(rule) || 
+    list_column_quantile_assert_hint.includes(rule) || 
+    list_column_pattern_assert_name_hint.includes(rule) || 
+    list_column_allowed_values_assert_hint.includes(rule)
+    ) {
+      setNoLimit(1);
+    } 
+    else if (list_column_column_assert_hint.includes(rule)) {
+      setNoLimit(2);
+    }
+    else {
+      setNoLimit(-1);
+    }
+  };
 
   const handleSelectOperator = (selected : any, index: any) => {
     const updatedSelectedOperator = [...selectedOperator];
@@ -51,21 +119,16 @@ export default function Page() {
     setSelectedCols([...selectedCols, []]) 
 
     setSelectedOperator([...selectedOperator, "None"]) 
-    console.log(selectedOperator);
-    
-    
+        
     setSelectedValue([...selectedValue, 0]) 
-    console.log(selectedValue);
 
     setSelectedAssertion([...selectedAssertion, ""])
 
     setIsValueDisabled([...isValueDisabled, true])
     
+    setSelectedRule([...selectedRule, ""])
+  
   };
-
-  function writeRule(list:any) {
-    
-  }
 
   function saveRulesToFile() {
     let cols = [];
@@ -91,27 +154,27 @@ export default function Page() {
   }else {
     for (let list = 0; list < selectedCols.length; list++) {
     
-    if (selectedCols[list].length == 1) {
-      jsonStructure = {
-          check: {
-            "column": selectedCols[list][0]["key"]
-          }
-        };
-        finalJsonStructure.checks.push(jsonStructure);
+      if (selectedCols[list].length == 1) {
+        jsonStructure = {
+            check: {
+              "column": selectedCols[list][0]["key"]
+            }
+          };
+          finalJsonStructure.checks.push(jsonStructure);
 
-    }else {
-      for (let index = 0; index < selectedCols.length; index++) {
-        cols.push(selectedCols[list][index]["key"])
+      }else {
+        for (let index = 0; index < selectedCols.length; index++) {
+          cols.push(selectedCols[list][index]["key"])
+        }
+        jsonStructure = {
+            check: {
+              "columns": JSON.stringify(cols)
+            }
+          };
+          finalJsonStructure.checks.push(jsonStructure);
       }
-      jsonStructure = {
-          check: {
-            "columns": JSON.stringify(cols)
-          }
-        };
-        finalJsonStructure.checks.push(jsonStructure);
-    }}
+    }
   }
-
 
     const jsonData = JSON.stringify(finalJsonStructure);
   
@@ -141,7 +204,12 @@ export default function Page() {
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator isValueDisabled={isValueDisabled[index]} selectedOperator={selectedOperator[index]} selectedValue={selectedValue[index]}  handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  key={index} columns={list} selectedCols={selectedCols[index]} handleColSelection={(selectedList:any) =>
+        <RuleCreator isAssertion={isAssertion} noLimit={noLimit} selectedRule={selectedRule[index]} 
+        handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} isValueDisabled={isValueDisabled[index]} 
+        selectedOperator={selectedOperator[index]} selectedValue={selectedValue[index]}  
+        handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 
+        handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  key={index} columns={list} 
+        selectedCols={selectedCols[index]} handleColSelection={(selectedList:any) =>
           handleSelectColumns(selectedList, index)
         } />
       ))}

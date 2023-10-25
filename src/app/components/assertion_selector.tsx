@@ -1,10 +1,10 @@
 import { useState } from "react"
 
-export default function AssertionSelector({isDisabled, isValueDisabled, operatorSelection, valueSelection, handleOperatorSelection, handleValueSelection} : {isDisabled : any, operatorSelection : any, handleOperatorSelection : any, handleValueSelection : any, valueSelection : any, isValueDisabled : any}) {
-    // handleAssertionSelection = () => {
-
-    // }
-    
+export default function AssertionSelector(
+  {isDisabled, isValueDisabled, operatorSelection, valueSelection, handleOperatorSelection, handleValueSelection} : 
+  {isDisabled : any, operatorSelection : any, handleOperatorSelection : any, handleValueSelection : any, valueSelection : any, 
+    isValueDisabled : any}) {
+      
     return <>
    <div className="col">
             <select className="form-select"  onChange={handleOperatorSelection} disabled={isDisabled} name="pets" id="pet-select">
