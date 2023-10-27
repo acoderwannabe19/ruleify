@@ -4,6 +4,39 @@ import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css'
 import ColumnSelector from "../components/column_selector";
 import AssertionSelector from "./assertion_selector";
+
+export default function RuleCreator({columns, selectedCols, handleColSelection}: {columns: any, selectedCols: any, handleColSelection: any }) {
+  // const [list, setList] = useState<any[]>([]);
+
+  const [selectedRule, setSelectedRule] = useState('');
+
+  const [noLimit, setNoLimit] = useState(-1); // Initialize noLimit with -1
+
+  const [isAssertion, setIsAssertion] = useState(false)
+  // Event handler to update the selected item when the user makes a selection
+  const handleSelectRule = (event: { target: { value: any; }; }) => {
+    const rule = event.target.value;
+    setSelectedRule(rule);
+    if (list_column_hint.includes(rule)) {
+      setIsAssertion(true)     
+    }
+    // Check if the selected rule is in list_column_hint
+    if (list_column_hint.includes(rule) || 
+    list_column_assert_binning_udf_max_bin_hint.includes(rule) || 
+    list_column_assert_hint.includes(rule) || 
+    list_column_datatype_assert_hint.includes(rule) || 
+    list_column_quantile_assert_hint.includes(rule) || 
+    list_column_pattern_assert_name_hint.includes(rule) || 
+    list_column_allowed_values_assert_hint.includes(rule)
+    ) {
+      setNoLimit(1);
+    } else if (list_column_column_assert_hint.includes(rule)) {
+      setNoLimit(2);
+    }
+    else {
+      setNoLimit(-1);
+    }
+  };
 import RuleSelector from "./rule_selector";
 
 
@@ -83,6 +116,7 @@ export default function RuleCreator(
   return <div className="m-4">
     <div className="row">
       <div className="col-12 col-lg-4">
+        <label>Choose a rule:</label>
         {/* <label>Choose a rule:</label>
         <select className="form-select" value={selectedRule} onChange={handleSelectRule} name="" id="">
           {rules_list && rules_list.map((item, index) => (
@@ -91,15 +125,15 @@ export default function RuleCreator(
             <RuleSelector ruleSelection={selectedRule} handleRuleSelection={handleRuleSelection} />
       </div>
       <div className="col-12 col-lg-4">
+      <ColumnSelector selectedCols={selectedCols} handleSelectedCols={handleColSelection}  noLimit={noLimit} options={columns} /> 
       <ColumnSelector isColumnDisabled={isColumnDisabled} selectedCols={selectedCols} handleSelectedCols={handleColSelection} noLimit={noLimit} options={columns} /> 
       </div>
       <div className="col-12 col-lg-4 row">
       <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
-
+        <AssertionSelector isDisabled={isAssertion}   />
         <AssertionSelector isValueDisabled={isValueDisabled} operatorSelection={selectedOperator} 
         valueSelection={selectedValue} handleOperatorSelection={handleOperatorSelection} handleValueSelection={handleValueSelection} 
         isDisabled={isAssertion}   />
-          
     </div>
     </div>
     </div>
