@@ -19,7 +19,7 @@ export default function Page() {
 
 
   let jsonStructure : {check : {[key: string]: any}} = {check: {}};
-  // let finalJsonStructure : {"checks" : [{"check": {any}}]};
+  let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
 
   
   const list_columns = ["areComplete", "areAnyComplete"]
@@ -70,13 +70,23 @@ export default function Page() {
     const rule = selected.target.value;
     if (list_column_hint.includes(rule)) {
       const updatedIsAssertion = [...isAssertion];
+      updatedIsAssertion[index] = true
+      setIsAssertion(updatedIsAssertion);
+    } else {
+      const updatedIsAssertion = [...isAssertion];
       updatedIsAssertion[index] = false
-      setIsAssertion(updatedSelectedRule);
+      setIsAssertion(updatedIsAssertion);
     }
+
+
     if (rule == "hasSize") {
       const updatedIsColumnDisabled = [...isColumnDisabled];
       updatedIsColumnDisabled[index] = true
-      setIsColumnDisabled(updatedSelectedRule);
+      setIsColumnDisabled(updatedIsColumnDisabled);
+    } else {
+      const updatedIsColumnDisabled = [...isColumnDisabled];
+      updatedIsColumnDisabled[index] = false
+      setIsColumnDisabled(updatedIsColumnDisabled);
     }
     if (list_column_hint.includes(rule) || list_column_assert_binning_udf_max_bin_hint.includes(rule) || 
     list_column_assert_hint.includes(rule) || list_column_datatype_assert_hint.includes(rule) || 
@@ -131,7 +141,6 @@ export default function Page() {
     
   
   };
-
   
   // function writeRuleToRulesFile(selectedRules: [""]) {
   //   selectedRules.map((rule) => {
