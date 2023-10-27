@@ -7,22 +7,19 @@ import RuleCreator from "./components/rule_creator";
 export default function Page() {
   const [list, setList] = useState([]);
   const [ruleCount, setRuleCount] = useState(1); // Initial count of RuleCreators
-   // Utilisez l'état pour stocker les options sélectionnées
-  
   const [selectedCols, setSelectedCols] = useState<any>([[]]);
   const [selectedOperator, setSelectedOperator] = useState<any>(["None"])
-  const [selectedValue, setSelectedValue] = useState<any>([0])
+  const [selectedValue, setSelectedValue] = useState<any>([null])
   const [selectedAssertion, setSelectedAssertion] = useState<any>([""])
   const [isValueDisabled, setIsValueDisabled] = useState<any>([true])
   const [selectedRule, setSelectedRule] = useState<any>([])
-
   const [noLimit, setNoLimit] = useState(-1); // Initialize noLimit with -1
+  const [isAssertion, setIsAssertion] = useState([false])
+  const [isColumnDisabled, setIsColumnDisabled] = useState<any>([false])
 
-  const [isAssertion, setIsAssertion] = useState(false)
 
   let jsonStructure = {"check" : {}};
   let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
-
   
   // const list_columns = ["areComplete", "areAnyComplete"]
 
@@ -63,31 +60,26 @@ export default function Page() {
     setSelectedValue(updatedSelectedValue);
        
   }
-
-  // const handleSelectRule = (selected : any, index: any) => {
-  //   const updatedSelectedRule = [...selectedRule];
-  //   updatedSelectedRule[index] = selected.target.value;
-  //   setSelectedRule(updatedSelectedRule);   
-  // }
-
+  
   const handleSelectRule = (selected : any, index: any) => {
     const updatedSelectedRule = [...selectedRule];
     updatedSelectedRule[index] = selected.target.value;
     setSelectedRule(updatedSelectedRule);
-    // console.log(selectedRule);
 
     const rule = selected.target.value;
-    // setSelectedRule(rule);
     if (list_column_hint.includes(rule)) {
-      setIsAssertion(true)     
+      const updatedIsAssertion = [...isAssertion];
+      updatedIsAssertion[index] = false
+      setIsAssertion(updatedSelectedRule);
     }
-    // Check if the selected rule is in list_column_hint
-    if (list_column_hint.includes(rule) || 
-    list_column_assert_binning_udf_max_bin_hint.includes(rule) || 
-    list_column_assert_hint.includes(rule) || 
-    list_column_datatype_assert_hint.includes(rule) || 
-    list_column_quantile_assert_hint.includes(rule) || 
-    list_column_pattern_assert_name_hint.includes(rule) || 
+    if (rule == "hasSize") {
+      const updatedIsColumnDisabled = [...isColumnDisabled];
+      updatedIsColumnDisabled[index] = true
+      setIsColumnDisabled(updatedSelectedRule);
+    }
+    if (list_column_hint.includes(rule) || list_column_assert_binning_udf_max_bin_hint.includes(rule) || 
+    list_column_assert_hint.includes(rule) || list_column_datatype_assert_hint.includes(rule) || 
+    list_column_quantile_assert_hint.includes(rule) || list_column_pattern_assert_name_hint.includes(rule) || 
     list_column_allowed_values_assert_hint.includes(rule)
     ) {
       setNoLimit(1);
@@ -109,6 +101,10 @@ export default function Page() {
       const updatedIsValueDisabled = [...isValueDisabled];    
       updatedIsValueDisabled[index] = false;
       setIsValueDisabled(updatedIsValueDisabled);
+    }else { 
+      const updatedIsValueDisabled = [...isValueDisabled];    
+      updatedIsValueDisabled[index] = true;
+      setIsValueDisabled(updatedIsValueDisabled);
     }
   }
 
@@ -127,6 +123,11 @@ export default function Page() {
     setIsValueDisabled([...isValueDisabled, true])
     
     setSelectedRule([...selectedRule, ""])
+
+    setIsAssertion([...isAssertion, false])
+
+    setIsColumnDisabled([...isColumnDisabled, false])
+    
   
   };
 
@@ -204,7 +205,7 @@ export default function Page() {
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator isAssertion={isAssertion} noLimit={noLimit} selectedRule={selectedRule[index]} 
+        <RuleCreator isColumnDisabled={isColumnDisabled[index]} isAssertion={isAssertion[index]} noLimit={noLimit} selectedRule={selectedRule[index]} 
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} isValueDisabled={isValueDisabled[index]} 
         selectedOperator={selectedOperator[index]} selectedValue={selectedValue[index]}  
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 

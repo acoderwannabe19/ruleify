@@ -9,10 +9,10 @@ import RuleSelector from "./rule_selector";
 
 export default function RuleCreator(
   {columns, selectedCols, handleColSelection, selectedOperator, selectedValue, selectedRule, handleRuleSelection,
-    handleOperatorSelection, handleValueSelection, isValueDisabled, noLimit, isAssertion}: 
+    handleOperatorSelection, handleValueSelection, isValueDisabled, noLimit, isAssertion, isColumnDisabled}: 
     {columns: any, selectedCols: any, handleColSelection: any, selectedOperator : any, handleOperatorSelection : any, 
       selectedValue : any, handleValueSelection : any, isValueDisabled: any, selectedRule: any, handleRuleSelection : any, noLimit : any, 
-      isAssertion : any}) {
+      isAssertion : any, isColumnDisabled : any}) {
 
   // const [selectedRule, setSelectedRule] = useState('');
 
@@ -91,7 +91,7 @@ export default function RuleCreator(
             <RuleSelector ruleSelection={selectedRule} handleRuleSelection={handleRuleSelection} />
       </div>
       <div className="col-12 col-lg-4">
-      <ColumnSelector selectedCols={selectedCols} handleSelectedCols={handleColSelection}   noLimit={noLimit} options={columns} /> 
+      <ColumnSelector isColumnDisabled={isColumnDisabled} selectedCols={selectedCols} handleSelectedCols={handleColSelection} noLimit={noLimit} options={columns} /> 
       </div>
       <div className="col-12 col-lg-4 row">
       <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>

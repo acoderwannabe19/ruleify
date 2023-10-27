@@ -1,13 +1,15 @@
 import Multiselect from "multiselect-react-dropdown";
 import React from "react";
 
-const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols  }: { options: any; noLimit: any; selectedCols: any; handleSelectedCols: any }) => {
+const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols, isColumnDisabled } : 
+  { options: any; noLimit: any; selectedCols: any; handleSelectedCols: any; isColumnDisabled : any }) => {
 
 
   return (
     <div >
       Choose column(s)
       <Multiselect
+      disable={isColumnDisabled}
         closeIcon="circle"
         displayValue="key"
         onKeyPressFn={function noRefCheck() {}}
