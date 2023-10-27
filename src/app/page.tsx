@@ -18,20 +18,21 @@ export default function Page() {
   const [isColumnDisabled, setIsColumnDisabled] = useState<any>([false])
 
 
-  let jsonStructure = {"check" : {}};
-  let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
+  let jsonStructure : {check : {[key: string]: any}} = {check: {}};
+  // let finalJsonStructure : {"checks" : [{"check": {any}}]};
+
   
-  // const list_columns = ["areComplete", "areAnyComplete"]
+  const list_columns = ["areComplete", "areAnyComplete"]
 
   const list_column_assert_hint = ["hasApproxCountDistinct", "containsURL", "containsSocialSecurityNumber", "containsEmail",
   "containsCreditCardNumber", "hasCompleteness", "hasEntropy", "hasMax", "hasMaxLength", "hasMean", "hasMin", "hasMinLength", 
   "hasStandardDeviation", "hasSum", "isPositive", "isNonNegative"]
 
-  // const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"]
+  const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"]
 
   const list_column_hint = ["isUnique", "isComplete"]
 
-  // const list_assert_hint = ["hasSize"]
+  const list_assert_hint = ["hasSize"]
 
   const list_column_quantile_assert_hint = ["hasApproxQuantile"]
 
@@ -130,6 +131,68 @@ export default function Page() {
     
   
   };
+
+  
+  // function writeRuleToRulesFile(selectedRules: [""]) {
+  //   selectedRules.map((rule) => {
+  //     jsonStructure = {
+  //       check: {
+  //         "rule": rule 
+  //       }
+  //     };
+  //     finalJsonStructure.checks.push(jsonStructure);
+  //   })
+  // }
+
+  // function writeColumnsAndAssertToRulesFile(selectedCols: [[{[key: string]: string}]], finalJsonStructure: any, selectedOperator: [], values: []) {
+  //   let rule;
+  //   let listValues;
+  //   let lambdaExpression;
+  //   for (let numCheck = 0; numCheck < finalJsonStructure.checks.length; numCheck++) {
+  //     rule = finalJsonStructure.checks[numCheck].check.rule;
+  //     if ((list_columns.includes(rule)) || (list_columns_assert_hint.includes(rule))) {
+  //       listValues = selectedCols[numCheck].map(object => object.key);
+  //       finalJsonStructure.checks[numCheck]["check"]["columns"] = JSON.stringify(listValues);
+  //     } else if (list_column_column_assert_hint.includes(rule)){
+  //       listValues = selectedCols[numCheck].map(object => object.key);
+  //       finalJsonStructure.checks[numCheck]["check"]["columnA"] = listValues[0];
+  //       finalJsonStructure.checks[numCheck]["check"]["columnB"] = listValues[1];
+  //     } else{
+  //          // if the rule function does not have column parameter
+  //       if (!list_assert_hint.includes(rule)) {
+  //         finalJsonStructure.checks[numCheck]["check"]["column"] = selectedCols[numCheck][0].key;
+  //       } 
+  //     }
+  //     if (selectedOperator[numCheck] != "None") {
+  //       lambdaExpression = `lambda x : x ${selectedOperator[numCheck]} ${values[numCheck]}`;
+  //       finalJsonStructure.checks[numCheck]["check"]["assertion"] = JSON.stringify(lambdaExpression); 
+  //     }
+  //   }
+  // }
+
+  // function saveRulesToFile() {
+  //   writeRuleToRulesFile(selectedRule);
+  //   writeColumnsAndAssertToRulesFile(selectedCols, finalJsonStructure, selectedOperator, selectedValue);
+
+  //   const jsonData = JSON.stringify(finalJsonStructure);
+  
+  //   // Create a Blob object with the JSON data
+  //   const blob = new Blob([jsonData], { type: 'application/json' });
+  
+  //   // Create a temporary URL for the Blob
+  //   const url = URL.createObjectURL(blob);
+  
+  //   // Create a link element to trigger the download
+  //   const a = document.createElement('a');
+  //   a.href = url;
+  //   a.download = 'rules.json';
+  
+  //   // Simulate a click to trigger the download
+  //   a.click();
+  
+  //   // Clean up by revoking the object URL
+  //   URL.revokeObjectURL(url);
+  // }
 
   function saveRulesToFile() {
     let cols = [];
