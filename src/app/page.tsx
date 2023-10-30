@@ -16,11 +16,17 @@ export default function Page() {
   const [noLimit, setNoLimit] = useState(-1); // Initialize noLimit with -1
   const [isAssertion, setIsAssertion] = useState([false])
   const [isColumnDisabled, setIsColumnDisabled] = useState<any>([false])
+  const [isAssertionMandatory, setIsAssertionMandatory] = useState<any>([false])
 
 
   let jsonStructure : {check : {[key: string]: any}} = {check: {}};
   let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
 
+
+  const mandatory_assert = ["hasApproxCountDistinct", "hasApproxQuantile", "hasCompleteness", "hasCorrelation", "hasDistinctness", 
+  "hasEntropy", "hasHistogramValues", "hasMax", "hasMaxLength", "hasMean", "hasMean", "hasMin", "hasMinLength", "hasMutualInformation", 
+  "hasNumberOfDistinctValues", "hasSize", "hasStandardDeviation", "hasSum", "hasUniqueValueRatio", "hasUniqueness","haveCompleteness", 
+  "haveAnyCompleteness"]
   
   const list_columns = ["areComplete", "areAnyComplete"]
 
@@ -28,7 +34,7 @@ export default function Page() {
   "containsCreditCardNumber", "hasCompleteness", "hasEntropy", "hasMax", "hasMaxLength", "hasMean", "hasMin", "hasMinLength", 
   "hasStandardDeviation", "hasSum", "isPositive", "isNonNegative"]
 
-  const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"]
+  const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio", "hasDistinctness"]
 
   const list_column_hint = ["isUnique", "isComplete"]
 
@@ -76,6 +82,16 @@ export default function Page() {
       const updatedIsAssertion = [...isAssertion];
       updatedIsAssertion[index] = false
       setIsAssertion(updatedIsAssertion);
+    }
+
+    if (mandatory_assert.includes(rule)) {
+      const updatedIsAssertionMandatory = [...isAssertionMandatory];
+      updatedIsAssertionMandatory[index] = true
+      setIsAssertionMandatory(updatedIsAssertionMandatory);
+    } else {
+      const updatedIsAssertionMandatory = [...isAssertionMandatory];
+      updatedIsAssertionMandatory[index] = false
+      setIsAssertionMandatory(updatedIsAssertionMandatory);
     }
 
 
@@ -138,56 +154,61 @@ export default function Page() {
     setIsAssertion([...isAssertion, false])
 
     setIsColumnDisabled([...isColumnDisabled, false])
+
+    setIsAssertionMandatory([...isAssertionMandatory, false])
+
+    console.log(isAssertionMandatory);
+    
   
   };
   
-
-
-  function saveRulesToFile() {
-    let cols = [];
-    if(ruleCount == 1){
-      if (selectedCols[0].length == 1) {
+  function writeRuleToRulesFile(selectedRules: [""]) {
+    selectedRules.map((rule) => {
       jsonStructure = {
-          check: {
-            "column": selectedCols[0][0]["key"]
-          }
-        };
-        finalJsonStructure.checks.push(jsonStructure);
-      }else {
-        for (let index = 0; index < selectedCols[0].length; index++) {
-          cols.push(selectedCols[0][index]["key"])
+        check: {
+          "rule": rule 
         }
-        jsonStructure = {
-            check: {
-              "columns": JSON.stringify(cols)
-            }
-          };
-        finalJsonStructure.checks.push(jsonStructure);
-      }
-  }else {
-    for (let list = 0; list < selectedCols.length; list++) {
-    
-      if (selectedCols[list].length == 1) {
-        jsonStructure = {
-            check: {
-              "column": selectedCols[list][0]["key"]
-            }
-          };
-          finalJsonStructure.checks.push(jsonStructure);
+      };
+      finalJsonStructure.checks.push(jsonStructure);
+    })
+  }
 
-      }else {
-        for (let index = 0; index < selectedCols.length; index++) {
-          cols.push(selectedCols[list][index]["key"])
-        }
-        jsonStructure = {
-            check: {
-              "columns": JSON.stringify(cols)
-            }
-          };
-          finalJsonStructure.checks.push(jsonStructure);
+  function writeColumnsAndAssertToRulesFile(selectedCols: [[{[key: string]: string}]], finalJsonStructure: any, selectedOperator: [], values: []) {
+    let rule;
+    let listValues;
+    let lambdaExpression;
+    for (let numCheck = 0; numCheck < finalJsonStructure.checks.length; numCheck++) {
+      rule = finalJsonStructure.checks[numCheck].check.rule;
+
+      if ((list_columns.includes(rule)) || (list_columns_assert_hint.includes(rule))) {
+        listValues = selectedCols[numCheck].map(object => object.key);
+        finalJsonStructure.checks[numCheck]["check"]["columns"] = JSON.stringify(listValues);
+      } 
+      else if (list_column_column_assert_hint.includes(rule)){
+        listValues = selectedCols[numCheck].map(object => object.key);
+        finalJsonStructure.checks[numCheck]["check"]["columnA"] = listValues[0];
+        finalJsonStructure.checks[numCheck]["check"]["columnB"] = listValues[1];
+      } 
+      else{
+           // if the rule function does not have column parameter
+        if (!list_assert_hint.includes(rule)) {
+          finalJsonStructure.checks[numCheck]["check"]["column"] = selectedCols[numCheck][0].key;
+        } 
+      }
+      if (selectedOperator[numCheck] != "None") {
+        lambdaExpression = `lambda x : x ${selectedOperator[numCheck]} ${values[numCheck]}`;
+        finalJsonStructure.checks[numCheck]["check"]["assertion"] = JSON.stringify(lambdaExpression); 
+      }
+      if (selectedOperator[numCheck] == "None" && !mandatory_assert.includes(rule)) {
+        // lambdaExpression = `lambda x : x ${selectedOperator[numCheck]} ${values[numCheck]}`;
+        finalJsonStructure.checks[numCheck]["check"]["assertion"] = "None"; 
       }
     }
   }
+
+  function saveRulesToFile() {
+    writeRuleToRulesFile(selectedRule);
+    writeColumnsAndAssertToRulesFile(selectedCols, finalJsonStructure, selectedOperator, selectedValue);
 
     const jsonData = JSON.stringify(finalJsonStructure);
   
@@ -210,14 +231,13 @@ export default function Page() {
     console.log(selectedCols);
     
   }
-  
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
       <title>Ruleify</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator isColumnDisabled={isColumnDisabled[index]} isAssertion={isAssertion[index]} noLimit={noLimit} selectedRule={selectedRule[index]} 
+        <RuleCreator isAssertionMandatory={isAssertionMandatory[index]} isColumnDisabled={isColumnDisabled[index]} isAssertion={isAssertion[index]} noLimit={noLimit} selectedRule={selectedRule[index]} 
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} isValueDisabled={isValueDisabled[index]} 
         selectedOperator={selectedOperator[index]} selectedValue={selectedValue[index]}  
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 

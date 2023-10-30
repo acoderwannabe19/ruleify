@@ -13,7 +13,7 @@ const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols, is
         closeIcon="circle"
         displayValue="key"
         onKeyPressFn={function noRefCheck() {}}
-        onRemove={(selectedList: any, selectedItem: any) => selectedList.remove(selectedItem)}
+        // onRemove={(selectedList: any, selectedItem: any) => selectedList.remove(selectedItem)}
         onSearch={function noRefCheck() {}}
         options={options.map((item: any) => ({ key: item }))}
         selectedValues={selectedCols} // Utilisez selectedValues pour afficher les options sélectionnées

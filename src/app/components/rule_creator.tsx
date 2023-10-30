@@ -8,11 +8,10 @@ import RuleSelector from "./rule_selector";
 
 export default function RuleCreator(
   {columns, selectedCols, handleColSelection, selectedOperator, selectedValue, selectedRule, handleRuleSelection,
-    handleOperatorSelection, handleValueSelection, isValueDisabled, noLimit, isAssertion, isColumnDisabled}: 
+    handleOperatorSelection, handleValueSelection, isValueDisabled, noLimit, isAssertion, isColumnDisabled, isAssertionMandatory}: 
     {columns: any, selectedCols: any, handleColSelection: any, selectedOperator : any, handleOperatorSelection : any, 
       selectedValue : any, handleValueSelection : any, isValueDisabled: any, selectedRule: any, handleRuleSelection : any, noLimit : any, 
-      isAssertion : any, isColumnDisabled : any}) {
-
+      isAssertion : any, isColumnDisabled : any, isAssertionMandatory : any}) {
   
   return <div className="m-4">
     <div className="row">
@@ -25,7 +24,7 @@ export default function RuleCreator(
       <div className="col-12 col-lg-4 row">
       <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
 
-        <AssertionSelector isValueDisabled={isValueDisabled} operatorSelection={selectedOperator} 
+        <AssertionSelector isAssertionMandatory={isAssertionMandatory} isValueDisabled={isValueDisabled} operatorSelection={selectedOperator} 
         valueSelection={selectedValue} handleOperatorSelection={handleOperatorSelection} handleValueSelection={handleValueSelection} 
         isDisabled={isAssertion}   />
           
