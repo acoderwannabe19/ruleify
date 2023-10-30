@@ -54,17 +54,17 @@ export default function RuleCreator(
   "hasMutualInformation", "isGreaterThan", "isGreaterThanOrEqualTo", "isLessThan", "isLessThanOrEqualTo", "isContainedIn", 
   "hasPattern", "hasDataType", "hasHistogramValues", "hasNumberOfDistinctValues"]
 
-  // const list_columns = ["areComplete", "areAnyComplete"]
+  const list_columns = ["areComplete", "areAnyComplete"]
 
   const list_column_assert_hint = ["hasApproxCountDistinct", "containsURL", "containsSocialSecurityNumber", "containsEmail",
   "containsCreditCardNumber", "hasCompleteness", "hasEntropy", "hasMax", "hasMaxLength", "hasMean", "hasMin", "hasMinLength", 
   "hasStandardDeviation", "hasSum", "isPositive", "isNonNegative"]
 
-  // const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"]
+  const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"]
 
   const list_column_hint = ["isUnique", "isComplete"]
 
-  // const list_assert_hint = ["hasSize"]
+  const list_assert_hint = ["hasSize"]
 
   const list_column_quantile_assert_hint = ["hasApproxQuantile"]
 
