@@ -7,8 +7,6 @@ import RuleCreator from "./components/rule_creator";
 export default function Page() {
   const [list, setList] = useState([]);
   const [ruleCount, setRuleCount] = useState(1); // Initial count of RuleCreators
-   // Utilisez l'état pour stocker les options sélectionnées
-   
   const [selectedCols, setSelectedCols] = useState<any>([[]]);
   const [selectedOperator, setSelectedOperator] = useState<any>(["None"])
   const [selectedValue, setSelectedValue] = useState<any>([null])
@@ -48,6 +46,8 @@ export default function Page() {
   const list_column_datatype_assert_hint = ["hasDataType"]
 
   const list_column_assert_binning_udf_max_bin_hint = ["hasHistogramValues", "hasNumberOfDistinctValues"]
+
+
   // Une fonction pour gérer la mise à jour des options sélectionnées
   const handleSelectColumns = (selectedList: any, index: any) => {
     const updatedSelectedCols = [...selectedCols];
@@ -122,10 +122,26 @@ export default function Page() {
 
   const addRule = () => {
     setRuleCount(ruleCount + 1);
-    setSelectedCols([...selectedCols, []])    
-  };
 
- 
+    setSelectedCols([...selectedCols, []]) 
+
+    setSelectedOperator([...selectedOperator, "None"]) 
+        
+    setSelectedValue([...selectedValue, 0]) 
+
+    setSelectedAssertion([...selectedAssertion, ""])
+
+    setIsValueDisabled([...isValueDisabled, true])
+    
+    setSelectedRule([...selectedRule, ""])
+
+    setIsAssertion([...isAssertion, false])
+
+    setIsColumnDisabled([...isColumnDisabled, false])
+    
+  
+  };
+  
   // function writeRuleToRulesFile(selectedRules: [""]) {
   //   selectedRules.map((rule) => {
   //     jsonStructure = {

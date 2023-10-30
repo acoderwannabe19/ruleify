@@ -15,7 +15,6 @@ const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols, is
         onKeyPressFn={function noRefCheck() {}}
         onRemove={function noRefCheck() {}}
         onSearch={function noRefCheck() {}}
-        // onSelect={function noRefCheck() {}}
         options={options.map((item: any) => ({ key: item }))}
         selectedValues={selectedCols} // Utilisez selectedValues pour afficher les options sélectionnées
         onSelect={handleSelectedCols} // Utilisez onSelect pour gérer la sélection
@@ -29,7 +28,6 @@ const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols, is
           },
           multiselectContainer: {
             color: '#000',
-            // fontFamily: 'Montserrat'
           },
           searchBox: {
             borderRadius: '5px',
