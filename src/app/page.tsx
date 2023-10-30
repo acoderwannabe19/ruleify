@@ -8,10 +8,7 @@ export default function Page() {
   const [list, setList] = useState([]);
   const [ruleCount, setRuleCount] = useState(1); // Initial count of RuleCreators
    // Utilisez l'état pour stocker les options sélectionnées
-  
-  const [selectedCols, setSelectedCols] = useState<any>([[]]);
-  let jsonStructure: { check: { [key: string]: any } } = { check: {} };
-  let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
+   
   const [selectedCols, setSelectedCols] = useState<any>([[]]);
   const [selectedOperator, setSelectedOperator] = useState<any>(["None"])
   const [selectedValue, setSelectedValue] = useState<any>([null])
@@ -128,73 +125,7 @@ export default function Page() {
     setSelectedCols([...selectedCols, []])    
   };
 
-  const list_columns = ["areComplete", "areAnyComplete"];
-  const list_column_hint = ["isUnique", "isComplete"];
-  const list_column_column_assert_hint = ["hasCorrelation", "hasMutualInformation", "isGreaterThan", "isGreaterThanOrEqualTo", 
-  "isLessThan", "isLessThanOrEqualTo"];
-  const list_assert_hint = ["hasSize"]
-  const list_columns_assert_hint = ["haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"];
-
-  function writeRuleToRulesFile(selectedRules: [""]) {
-    selectedRules.map((rule) => {
-      jsonStructure = {
-        check: {
-          "rule": rule 
-        }
-      };
-      finalJsonStructure.checks.push(jsonStructure);
-    })
-  }
-
-  function writeColumnsAndAssertToRulesFile(selectedCols: [[{[key: string]: string}]], finalJsonStructure: {"checks" : [{"check": {[key: string]: any}}]}, selectedOperator: [], values: []) {
-    let rule;
-    let listValues;
-    let lambdaExpression;
-    for (let numCheck = 0; numCheck < finalJsonStructure.checks.length; numCheck++) {
-      rule = finalJsonStructure.checks[numCheck].check.rule;
-      if ((list_columns.includes(rule)) || (list_columns_assert_hint.includes(rule))) {
-        listValues = selectedCols[numCheck].map(object => object.key);
-        finalJsonStructure.checks[numCheck]["check"]["columns"] = JSON.stringify(listValues);
-      } else if (list_column_column_assert_hint.includes(rule)){
-        listValues = selectedCols[numCheck].map(object => object.key);
-        finalJsonStructure.checks[numCheck]["check"]["columnA"] = listValues[0];
-        finalJsonStructure.checks[numCheck]["check"]["columnB"] = listValues[1];
-      } else{
-           // if the rule function does not have column parameter
-        if (!list_assert_hint.includes(rule)) {
-          finalJsonStructure.checks[numCheck]["check"]["column"] = selectedCols[numCheck][0].key;
-        } 
-      }
-      if (selectedOperator[numCheck] != "None") {
-        lambdaExpression = `lambda x : x ${selectedOperator[numCheck]} ${values[numCheck]}`;
-        finalJsonStructure.checks[numCheck]["check"]["assertion"] = JSON.stringify(lambdaExpression); 
-      }
-    }
-  }
-
-  function saveRulesToFile() {
-    // writeRuleToRulesFile(selectedRules);
-    // writeColumnsAndAssertToRulesFile(selectedCols, finalJsonStructure, selectedOperqtors, values);
-
-    setSelectedCols([...selectedCols, []]) 
-
-    setSelectedOperator([...selectedOperator, "None"]) 
-        
-    setSelectedValue([...selectedValue, 0]) 
-
-    setSelectedAssertion([...selectedAssertion, ""])
-
-    setIsValueDisabled([...isValueDisabled, true])
-    
-    setSelectedRule([...selectedRule, ""])
-
-    setIsAssertion([...isAssertion, false])
-
-    setIsColumnDisabled([...isColumnDisabled, false])
-    
-  
-  };
-  
+ 
   // function writeRuleToRulesFile(selectedRules: [""]) {
   //   selectedRules.map((rule) => {
   //     jsonStructure = {
@@ -330,7 +261,6 @@ export default function Page() {
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator  key={index} columns={list} selectedCols={selectedCols[index]} handleColSelection={(selectedList:any) =>
         <RuleCreator isColumnDisabled={isColumnDisabled[index]} isAssertion={isAssertion[index]} noLimit={noLimit} selectedRule={selectedRule[index]} 
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} isValueDisabled={isValueDisabled[index]} 
         selectedOperator={selectedOperator[index]} selectedValue={selectedValue[index]}  
