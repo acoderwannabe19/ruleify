@@ -83,15 +83,6 @@ export default function RuleCreator(
   return <div className="m-4">
     <div className="row">
       <div className="col-12 col-lg-4">
-<<<<<<<<< Temporary merge branch 1
-        <label>Choose a rule:</label>
-        {/* <label>Choose a rule:</label>
-        <select className="form-select" value={selectedRule} onChange={handleSelectRule} name="" id="">
-          {rules_list && rules_list.map((item, index) => (
-              <option key={index} value={item}>{item}</option>
-            ))}        </select> */}
-=========
->>>>>>>>> Temporary merge branch 2
             <RuleSelector ruleSelection={selectedRule} handleRuleSelection={handleRuleSelection} />
       </div>
       <div className="col-12 col-lg-4">
