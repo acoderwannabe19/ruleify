@@ -3,9 +3,8 @@ import React from "react";
 
 const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols, isColumnDisabled } : 
   { options: any; noLimit: any; selectedCols: any; handleSelectedCols: any; isColumnDisabled : any }) => {
-
-
-  return (
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+  return (                                    
     <div >
       Choose column(s)
       <Multiselect
@@ -16,8 +15,8 @@ const ColumnSelector = ({ options, noLimit, selectedCols, handleSelectedCols, is
         // onRemove={(selectedList: any, selectedItem: any) => selectedList.remove(selectedItem)}
         onSearch={function noRefCheck() {}}
         options={options.map((item: any) => ({ key: item }))}
-        selectedValues={selectedCols} // Utilisez selectedValues pour afficher les options sélectionnées
-        onSelect={handleSelectedCols} // Utilisez onSelect pour gérer la sélection
+        selectedValues={selectedCols}
+        onSelect={handleSelectedCols}
         placeholder="Search"
         selectionLimit={noLimit}
         showCheckbox

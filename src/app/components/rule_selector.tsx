@@ -1,5 +1,6 @@
 
 export default function RuleSelector({ruleSelection, handleRuleSelection} : {ruleSelection : any, handleRuleSelection : any}) {
+  
     const rules_list = ["areComplete", "areAnyComplete", "hasApproxCountDistinct", "containsURL", "containsSocialSecurityNumber",
   "containsEmail", "containsCreditCardNumber", "hasCompleteness", "hasEntropy", "hasMax", "hasMaxLength", "hasMean", "hasMin",
   "hasMinLength", "hasStandardDeviation", "hasSum", "isPositive", "isNonNegative", "haveCompleteness", "haveAnyCompleteness", 
