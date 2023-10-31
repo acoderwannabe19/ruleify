@@ -17,6 +17,7 @@ export default function Page() {
   const [isAssertion, setIsAssertion] = useState([false])
   const [isColumnDisabled, setIsColumnDisabled] = useState<any>([false])
   const [isAssertionMandatory, setIsAssertionMandatory] = useState<any>([false])
+  const [isDeleted, setIsDeleted] = useState<any>([false])
 
 
   let jsonStructure : {check : {[key: string]: any}} = {check: {}};
@@ -192,6 +193,7 @@ export default function Page() {
       else{
            // if the rule function does not have column parameter
         if (!list_assert_hint.includes(rule)) {
+          console.log(selectedCols[numCheck]);
           finalJsonStructure.checks[numCheck]["check"]["column"] = selectedCols[numCheck][0].key;
         } 
       }
@@ -237,7 +239,7 @@ export default function Page() {
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator isAssertionMandatory={isAssertionMandatory[index]} isColumnDisabled={isColumnDisabled[index]} isAssertion={isAssertion[index]} noLimit={noLimit} selectedRule={selectedRule[index]} 
+        <RuleCreator componentKey={index} isAssertionMandatory={isAssertionMandatory[index]} isColumnDisabled={isColumnDisabled[index]} isAssertion={isAssertion[index]} noLimit={noLimit} selectedRule={selectedRule[index]} 
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} isValueDisabled={isValueDisabled[index]} 
         selectedOperator={selectedOperator[index]} selectedValue={selectedValue[index]}  
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 
