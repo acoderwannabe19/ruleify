@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^1.5.1",
     "bootstrap": "^5.3.2",
+    "bootstrap-icons": "^1.11.1",
     "multiselect-react-dropdown": "^2.0.25",
     "next": "13.5.4",
     "react": "^18",
