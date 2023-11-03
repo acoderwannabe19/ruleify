@@ -186,12 +186,16 @@ export default function Page() {
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator handleRemovedCols={(selected:any) =>handleRemovedCol(selected, index)} handleDeletion={() => deleteRule(index)} obj={listObj[index]} componentKey={index}  
+        <RuleCreator 
+        handleRemovedCols={(selected:any) =>handleRemovedCol(selected, index)} 
+        handleDeletion={() => deleteRule(index)} obj={listObj[index]}  
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} 
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 
-        handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  key={index} columns={list} 
-        handleColSelection={(selectedList:any) => handleSelectColumns(selectedList, index)
-        } />
+        handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  
+        handleColSelection={(selectedList:any) => handleSelectColumns(selectedList, index)}
+        key={index} columns={list} 
+        componentKey={index}      
+         />
       ))}
       <div className="flex justify-center">
         <button className="btn btn-outline-success m-3" onClick={addRule}>

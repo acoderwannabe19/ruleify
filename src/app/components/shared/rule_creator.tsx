@@ -36,14 +36,24 @@ export default function RuleCreator(
             />
       </div>
       <div className="col-12 col-lg-3">
-      <ColumnSelector handleRemovedCols={handleRemovedCols}
-      isColumnDisabled={obj.isColumnDisabled} selectedCols={obj.selectedCols} handleSelectedCols={handleColSelection} noLimit={obj.noLimit} options={columns} /> 
+      <ColumnSelector 
+        handleRemovedCols={handleRemovedCols}
+        isColumnDisabled={obj.isColumnDisabled} 
+        selectedCols={obj.selectedCols} 
+        handleSelectedCols={handleColSelection} 
+        noLimit={obj.noLimit} 
+        options={columns} 
+      /> 
       </div>
       <div className="col-12 col-lg-5">
 
-        <AssertionSelector  obj={obj} operatorSelection={obj.selectedOperator} 
-        valueSelection={obj.selectedValue} handleOperatorSelection={handleOperatorSelection} handleValueSelection={handleValueSelection} 
-        isDisabled={obj.isAssertion}/> 
+        <AssertionSelector  
+          obj={obj} 
+          operatorSelection={obj.selectedOperator} 
+          valueSelection={obj.selectedValue} 
+          handleOperatorSelection={handleOperatorSelection} 
+          handleValueSelection={handleValueSelection} 
+          isDisabled={obj.isAssertion}/> 
       </div>
       <div className="col-2 col-lg-1 m-auto ">
         <button onClick={handleDeletion}  className="btn btn-outline-danger " style={{}}><i className="bi bi-trash3"></i></button>
