@@ -8,11 +8,23 @@ import RuleSelector from "../common/rule_selector";
 
 
 export default function RuleCreator(
-  {columns, handleColSelection, handleRuleSelection, handleDeletion,
-    handleOperatorSelection, handleValueSelection, componentKey, obj}: 
-    {columns: any, handleColSelection: any, handleOperatorSelection : any, 
-      handleValueSelection : any, handleRuleSelection : any, handleDeletion:any,
-      componentKey: any, obj:any}) {
+  {columns, 
+    handleColSelection, 
+    handleRuleSelection, 
+    handleDeletion,
+    handleRemovedCols,
+    handleOperatorSelection, 
+    handleValueSelection, 
+    componentKey, 
+    obj}: 
+    {columns: any, handleColSelection: any, 
+      handleOperatorSelection : any, 
+      handleValueSelection : any, 
+      handleRuleSelection : any, 
+      handleDeletion:any,
+      componentKey: any, 
+      obj:any, 
+      handleRemovedCols:any}) {
 
 
   return <div id={componentKey} className="m-4">
@@ -24,11 +36,10 @@ export default function RuleCreator(
             />
       </div>
       <div className="col-12 col-lg-3">
-      <ColumnSelector 
+      <ColumnSelector handleRemovedCols={handleRemovedCols}
       isColumnDisabled={obj.isColumnDisabled} selectedCols={obj.selectedCols} handleSelectedCols={handleColSelection} noLimit={obj.noLimit} options={columns} /> 
       </div>
       <div className="col-12 col-lg-5">
-        <label className="text-center" htmlFor="pet-select">Choose an assertion:</label>
 
         <AssertionSelector  obj={obj} operatorSelection={obj.selectedOperator} 
         valueSelection={obj.selectedValue} handleOperatorSelection={handleOperatorSelection} handleValueSelection={handleValueSelection} 

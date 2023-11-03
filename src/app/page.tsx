@@ -19,12 +19,9 @@ export default function Page() {
     isAssertionMandatory: false, 
     noLimit: -1
   }
-
   const [listObj, setListObj] = useState([obj])
-
   const [list, setList] = useState([]);
   const [ruleCount, setRuleCount] = useState(1); 
-
 
   let jsonStructure : {check : {[key: string]: any}} = {check: {}};
   let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
@@ -96,6 +93,18 @@ export default function Page() {
     setListObj(updatedListObject)
   }
 
+  const handleRemovedCol = (selected : any, index:any) => {
+    const updatedListObject = [...listObj]
+    var keyValues = [];
+
+    for (var i = 0; i < selected.length; i++) {
+      keyValues.push(selected[i].key);
+    }
+    updatedListObject[index].selectedCol = keyValues
+    setListObj(updatedListObject)
+    
+  }
+
 
   const addRule = () => {
     setListObj([...listObj, obj])
@@ -125,7 +134,6 @@ export default function Page() {
   function writeColumnsAndAssertToRulesFile(listObj: any, finalJsonStructure: any) {
     let rule;
     let lambdaExpression;
-    // console.log(listObj);
     
     for (let numCheck = 0; numCheck < finalJsonStructure.checks.length; numCheck++) {
       rule = finalJsonStructure.checks[numCheck].check.rule;
@@ -135,7 +143,7 @@ export default function Page() {
       } 
       else if (constants.list_column_column_assert_hint.includes(rule)){
         finalJsonStructure.checks[numCheck]["check"]["columnA"] = listObj[numCheck].selectedCols[0];
-        finalJsonStructure.checks[numCheck]["check"]["columnB"] = listObj[numCheck].selectedCols[0];
+        finalJsonStructure.checks[numCheck]["check"]["columnB"] = listObj[numCheck].selectedCols[1];
       } 
       else{
         if (!constants.list_assert_hint.includes(rule)) {
@@ -159,32 +167,26 @@ export default function Page() {
 
     const jsonData = JSON.stringify(finalJsonStructure);
   
-    // Create a Blob object with the JSON data
     const blob = new Blob([jsonData], { type: 'application/json' });
   
-    // Create a temporary URL for the Blob
     const url = URL.createObjectURL(blob);
   
-    // Create a link element to trigger the download
     const a = document.createElement('a');
     a.href = url;
     a.download = 'rules.json';
   
-    // Simulate a click to trigger the download
     a.click();
   
-    // Clean up by revoking the object URL
-    URL.revokeObjectURL(url);
-    // console.log(selectedCols);
-    
+    URL.revokeObjectURL(url);    
   }
+
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
       <title>Ruleify</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
-        <RuleCreator handleDeletion={() => deleteRule(index)} obj={listObj[index]} componentKey={index}  
+        <RuleCreator handleRemovedCols={(selected:any) =>handleRemovedCol(selected, index)} handleDeletion={() => deleteRule(index)} obj={listObj[index]} componentKey={index}  
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} 
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 
         handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  key={index} columns={list} 

@@ -75,7 +75,10 @@ const styles = {
   } as CSSProperties,
 };
 
-export default function CSVReader({onListChange} : {onListChange: any}) {
+export default function CSVReader(
+  {onListChange} : 
+  {onListChange: any}
+  ) {
   const { CSVReader } = useCSVReader();
   const [zoneHover, setZoneHover] = useState(false);
   const [removeHoverColor, setRemoveHoverColor] = useState(
