@@ -19,7 +19,7 @@ export default function Page() {
     isAssertionMandatory: false, 
     noLimit: -1
   }
-  const [listObj, setListObj] = useState([obj])
+  const [listObj, setListObj] = useState([obj]);
   const [list, setList] = useState([]);
   const [ruleCount, setRuleCount] = useState(1); 
 
@@ -37,7 +37,7 @@ export default function Page() {
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedValue = selected.target.value;
     setListObj(updatedListObject)
-  }
+  };
   
   const handleSelectRule = (selected : any, index: any) => {
     const updatedListObject = [...listObj]
@@ -91,7 +91,7 @@ export default function Page() {
       updatedListObject[index].isValueDisabled = true;
     }
     setListObj(updatedListObject)
-  }
+  };
 
   const handleRemovedCol = (selected : any, index:any) => {
     const updatedListObject = [...listObj]
@@ -103,8 +103,7 @@ export default function Page() {
     updatedListObject[index].selectedCol = keyValues
     setListObj(updatedListObject)
     
-  }
-
+  };
 
   const addRule = () => {
     setListObj([...listObj, obj])
@@ -118,7 +117,7 @@ export default function Page() {
     setListObj(updatedListObject);
     setRuleCount(ruleCount - 1);
     
-  }
+  };
   
   function writeRuleToRulesFile(selectedRules: string[]) {
     selectedRules.map((rule) => {
@@ -129,7 +128,7 @@ export default function Page() {
       };
       finalJsonStructure.checks.push(jsonStructure);
     })
-  }
+  };
 
   function writeColumnsAndAssertToRulesFile(listObj: any, finalJsonStructure: any) {
     let rule;
@@ -158,14 +157,15 @@ export default function Page() {
         finalJsonStructure.checks[numCheck]["check"]["assertion"] = "None"; 
       }
     }
-  }
+  };
 
   function saveRulesToFile() {
     const selectedRules = listObj.map(obj => obj.selectedRule);
+
     writeRuleToRulesFile(selectedRules);
     writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
 
-    const jsonData = JSON.stringify(finalJsonStructure);
+    const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
   
     const blob = new Blob([jsonData], { type: 'application/json' });
   
@@ -174,11 +174,10 @@ export default function Page() {
     const a = document.createElement('a');
     a.href = url;
     a.download = 'rules.json';
-  
     a.click();
   
     URL.revokeObjectURL(url);    
-  }
+  };
 
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
@@ -188,20 +187,22 @@ export default function Page() {
       {Array.from({ length: ruleCount }).map((_, index) => (
         <RuleCreator 
         handleRemovedCols={(selected:any) =>handleRemovedCol(selected, index)} 
-        handleDeletion={() => deleteRule(index)} obj={listObj[index]}  
+        handleDeletion={() => deleteRule(index)} 
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} 
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 
         handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  
         handleColSelection={(selectedList:any) => handleSelectColumns(selectedList, index)}
-        key={index} columns={list} 
+        key={index} 
+        columns={list} 
         componentKey={index}      
-         />
+        obj={listObj[index]}  
+        />
       ))}
       <div className="flex justify-center">
         <button className="btn btn-outline-success m-3" onClick={addRule}>
           + Add a rule
         </button>
-        <button onClick={saveRulesToFile} className="btn btn-outline-success m-3">Save rules file</button>
+        <button  onClick={saveRulesToFile} className="btn btn-outline-success m-3">Save rules file</button>
       </div>
     </div>
     

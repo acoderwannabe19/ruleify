@@ -9,7 +9,7 @@ export default function RuleSelector(
     
     return <>
         <label>Choose a rule:</label>
-        <select className="form-select" 
+        <select required className="form-select" 
           value={ruleSelection} 
           onChange={handleRuleSelection} 
           name="" 
