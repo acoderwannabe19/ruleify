@@ -205,7 +205,7 @@ export default function Page() {
           writeRuleToRulesFile(selectedRules);
           writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
 
-          const jsonData = JSON.stringify(finalJsonStructure);
+          const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
         
           const blob = new Blob([jsonData], { type: 'application/json' });
         
@@ -222,24 +222,24 @@ export default function Page() {
         alert("vous n'avez pas remplit tous les champs !");
     }   
   }
-    const selectedRules = listObj.map(obj => obj.selectedRule);
+    // const selectedRules = listObj.map(obj => obj.selectedRule);
 
-    writeRuleToRulesFile(selectedRules);
-    writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
+    // writeRuleToRulesFile(selectedRules);
+    // writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
 
-    const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
+    // const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
   
-    const blob = new Blob([jsonData], { type: 'application/json' });
+    // const blob = new Blob([jsonData], { type: 'application/json' });
   
-    const url = URL.createObjectURL(blob);
+    // const url = URL.createObjectURL(blob);
   
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'rules.json';
-    a.click();
+    // const a = document.createElement('a');
+    // a.href = url;
+    // a.download = 'rules.json';
+    // a.click();
   
-    URL.revokeObjectURL(url);    
-  };
+    // URL.revokeObjectURL(url);    
+  
 
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
