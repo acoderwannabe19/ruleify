@@ -79,11 +79,11 @@ export default function Page() {
       (constants.list_assert_hint.includes(updatedListObject[index].selectedRule))
       ) {
       updatedListObject[index].isColumnValid = true;
-      console.log("col true");
+      // console.log("col true");
       
     } else {
       updatedListObject[index].isColumnValid = false;
-      console.log("col false");
+      // console.log("col false");
       
     }
     setListObj(updatedListObject)
