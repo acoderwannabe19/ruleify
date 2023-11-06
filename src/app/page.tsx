@@ -17,7 +17,10 @@ export default function Page() {
     isAssertion: false,
     isColumnDisabled: false,
     isAssertionMandatory: false, 
-    noLimit: -1
+    noLimit: -1,
+    isColumnValid: false,
+    isAssertionValid: true,
+    isRuleValid: false
   }
   const [listObj, setListObj] = useState([obj]);
   const [list, setList] = useState([]);
@@ -26,56 +29,81 @@ export default function Page() {
   let jsonStructure : {check : {[key: string]: any}} = {check: {}};
   let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
 
-  const isColumnSelectionvalidate = (obj: any) => {
-    if(!obj.isColumnDisabled) {
-      if((constants.list_column_column_assert_hint.includes(obj.selectedRule) 
-      && (obj.selectedCol.length != 2)) || (!constants.list_column_column_assert_hint.includes(obj.selectedRule) 
-      && (obj.selectedCol[0]).length == 0)) {
-        console.log("col false");
-        return false;
-      }else{
-        console.log("col col true");  
-        return true;
-      }
-    } else{
-      console.log("col true");
-      return true;
-    }
-  } 
+  // const isColumnSelectionvalidate = (obj: any) => {
+  //   if(!obj.isColumnDisabled) {
+  //     if((constants.list_column_column_assert_hint.includes(obj.selectedRule) 
+  //     && (obj.selectedCol.length != 2)) || (!constants.list_column_column_assert_hint.includes(obj.selectedRule) 
+  //     && (obj.selectedCol[0]).length == 0)) {
+  //       console.log("col false");
+  //       return false;
+  //     }else{
+  //       console.log("col col true");  
+  //       return true;
+  //     }
+  //   } else{
+  //     console.log("col true");
+  //     return true;
+  //   }
+  // } 
 
-  const isAssertionvalidate = (obj: any) => {
-    if(obj.selectedOperator !== "None" && obj.selectedValue == null) {
-      console.log(obj.selectedOperator);
-      console.log("assertion false");
-      return false;
-    } else {
-      console.log("assertion true");
-      return true
-    };
-  } 
-  const isFormvalidate = () => {
-    let isFormValid = true;
-    listObj.forEach(obj => {
-      if (!isColumnSelectionvalidate(obj) || !isAssertionvalidate(obj)) {
-        console.log("form false");
-        isFormValid = false;
-      }
-    });
+  // const isAssertionvalidate = (obj: any) => {
+  //   if(obj.selectedOperator !== "None" && obj.selectedValue == null) {
+  //     console.log(obj.selectedOperator);
+  //     console.log("assertion false");
+  //     return false;
+  //   } else {
+  //     console.log("assertion true");
+  //     return true
+  //   };
+  // } 
 
-    return isFormValid;
-  } 
+  // const isFormvalidate = () => {
+  //   let isFormValid = true;
+  //   listObj.forEach(obj => {
+  //     if (!isColumnSelectionvalidate(obj) || !isAssertionvalidate(obj)) {
+  //       console.log("form false");
+  //       isFormValid = false;
+  //     }
+  //   });
+
+  //   return isFormValid;
+  // } 
 
   const handleSelectColumns = (selectedList: [{[key: string]: string}], index: any) => {
     const selectedCols = selectedList.map(obj => obj.key);
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedCol = selectedCols;
+
+    if ((updatedListObject[index].selectedCol.length != 0 && !constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule)) || 
+      ((constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule) && updatedListObject[index].selectedCol.length == 2)) ||
+      (constants.list_assert_hint.includes(updatedListObject[index].selectedRule))
+      ) {
+      updatedListObject[index].isColumnValid = true;
+      console.log("col true");
+      
+    } else {
+      updatedListObject[index].isColumnValid = false;
+      console.log("col false");
+      
+    }
     setListObj(updatedListObject)
   };
 
   const handleSelectValue = (selected : any, index: any) => {
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedValue = selected.target.value;
+
+    if ((updatedListObject[index].selectedValue === null && updatedListObject[index].selectedOperator != "None")
+    ) {
+      updatedListObject[index].isAssertionValid = false;
+      // console.log("ass false");
+      
+    } else {
+      updatedListObject[index].isAssertionValid = true;
+      // console.log("ass true");
+    }
     setListObj(updatedListObject)
+
   };
   
   const handleSelectRule = (selected : any, index: any) => {
@@ -95,7 +123,6 @@ export default function Page() {
     } else {
       updatedListObject[index].isAssertionMandatory = false
     }
-
 
     if (rule == "hasSize") {
       updatedListObject[index].isColumnDisabled = true
@@ -124,12 +151,23 @@ export default function Page() {
 
     updatedListObject[index].selectedOperator = selected.target.value;
 
-    if (updatedListObject[index].selectedOperator != "None") {      
-      updatedListObject[index].isValueDisabled = false;
-    }else { 
-      updatedListObject[index].isValueDisabled = true;
+    if (updatedListObject[index].selectedOperator != "None") {
+      updatedListObject[index].isValueDisabled = false
+    } else {
+      updatedListObject[index].isValueDisabled = true
     }
-    setListObj(updatedListObject)
+
+    if ((updatedListObject[index].selectedValue == null && updatedListObject[index].selectedOperator != "None")
+    ) {
+      updatedListObject[index].isAssertionValid = false;
+      // console.log("ass false");
+      
+    } else {
+      updatedListObject[index].isAssertionValid = true;
+      // console.log("ass true");
+    }
+
+    setListObj(updatedListObject)    
   };
 
   const handleRemovedCol = (selected : any, index:any) => {
@@ -147,6 +185,8 @@ export default function Page() {
   const addRule = () => {
     setListObj([...listObj, obj])
     setRuleCount(ruleCount + 1);
+    console.log(listObj[0]);
+    
   };
 
   const deleteRule = (index: any) => {
@@ -199,28 +239,49 @@ export default function Page() {
     }
   };
 
-  function saveRulesToFile() {
-    if (isFormvalidate()) {
-          const selectedRules = listObj.map(obj => obj.selectedRule);
-          writeRuleToRulesFile(selectedRules);
-          writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
-
-          const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
-        
-          const blob = new Blob([jsonData], { type: 'application/json' });
-        
-          const url = URL.createObjectURL(blob);
-        
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'rules.json';
-        
-          a.click();
-        
-          URL.revokeObjectURL(url); 
+  const isFormValid = () => {
+    for (const obj of listObj) {
+      if (obj.isAssertionValid == true && obj.isColumnValid == true) {
+        obj.isRuleValid = true;
       } else {
-        alert("vous n'avez pas remplit tous les champs !");
-    }   
+        obj.isRuleValid = false;
+      }
+      if (obj.isRuleValid === false) {
+        console.log("nope");
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+
+  function saveRulesToFile() {
+    // console.log(isFormValid());    
+    if(isFormValid()){
+          const selectedRules = listObj.map(obj => obj.selectedRule);
+          
+            writeRuleToRulesFile(selectedRules);
+            writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
+
+            const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
+          
+            const blob = new Blob([jsonData], { type: 'application/json' });
+          
+            const url = URL.createObjectURL(blob);
+          
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rules.json';
+          
+            a.click();
+          
+            URL.revokeObjectURL(url); 
+    } else {
+      alert("Please make sure all rules are valid before downloading the file.");
+    }
+      
+
   }  
 
   return (
