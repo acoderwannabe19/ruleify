@@ -1,5 +1,5 @@
-export function errorMessage({message}: {message: ""}) {
+export default function ErrorMessage({message}: {message: string}) {
     return (
-        <span style={{color: "red"}}>`Veuillez choisir {message}.`</span>
+       message.length >= 1 ? <div style={{color: "red"}}>Veuillez choisir {message}.</div> : ""
     )
 }

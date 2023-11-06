@@ -1,3 +1,4 @@
+import ErrorMessage  from "./errorMessage";
 
 export default function AssertionSelector(
   {isDisabled, 
@@ -15,6 +16,7 @@ export default function AssertionSelector(
     return <>
       <div className="row">
       <label className="text-center" htmlFor="assertion-select">Choose an assertion:</label>
+      {obj.assertionErrorMessage >= 1 ? <ErrorMessage message= {obj.assertionErrorMessage}></ErrorMessage> : "" }
         <div className="col">
                   <select className="form-select"  
                     onChange={handleOperatorSelection} 

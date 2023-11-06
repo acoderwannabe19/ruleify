@@ -13,6 +13,9 @@ export default function Page() {
     selectedOperator : "None",
     selectedValue : null,
     selectedAssertion : "",
+    columnErrorMessage: "",
+    assertionErrorMessage: "",
+    isFormValid: false,
     isValueDisabled: true,
     isAssertion: false,
     isColumnDisabled: false,
@@ -31,37 +34,39 @@ export default function Page() {
       if((constants.list_column_column_assert_hint.includes(obj.selectedRule) 
       && (obj.selectedCol.length != 2)) || (!constants.list_column_column_assert_hint.includes(obj.selectedRule) 
       && (obj.selectedCol[0]).length == 0)) {
-        console.log("col false");
         return false;
       }else{
-        console.log("col col true");  
         return true;
       }
     } else{
-      console.log("col true");
       return true;
     }
   } 
 
   const isAssertionvalidate = (obj: any) => {
     if(obj.selectedOperator !== "None" && obj.selectedValue == null) {
-      console.log(obj.selectedOperator);
-      console.log("assertion false");
       return false;
     } else {
-      console.log("assertion true");
       return true
     };
   } 
   const isFormvalidate = () => {
     let isFormValid = true;
-    listObj.forEach(obj => {
-      if (!isColumnSelectionvalidate(obj) || !isAssertionvalidate(obj)) {
-        console.log("form false");
+    let updatedListObject= [...listObj];
+    for (let i = 0; i < listObj.length; i++) {
+      if (!isColumnSelectionvalidate(listObj[i])) {
+        constants.list_column_column_assert_hint.includes(listObj[i].selectedRule) ? 
+        updatedListObject[i].columnErrorMessage = "excatement deux colonnes": 
+        updatedListObject[i].columnErrorMessage = "au moins une colonne";
         isFormValid = false;
+      } else if (!isAssertionvalidate(listObj[i])) {
+        updatedListObject[i].assertionErrorMessage = "un opérateur et une valeur";
+        isFormValid = false;
+      } else {
+        updatedListObject[i].isFormValid = true;
       }
-    });
-
+      setListObj(updatedListObject)
+    }
     return isFormValid;
   } 
 
@@ -222,24 +227,6 @@ export default function Page() {
         alert("vous n'avez pas remplit tous les champs !");
     }   
   }
-    // const selectedRules = listObj.map(obj => obj.selectedRule);
-
-    // writeRuleToRulesFile(selectedRules);
-    // writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
-
-    // const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
-  
-    // const blob = new Blob([jsonData], { type: 'application/json' });
-  
-    // const url = URL.createObjectURL(blob);
-  
-    // const a = document.createElement('a');
-    // a.href = url;
-    // a.download = 'rules.json';
-    // a.click();
-  
-    // URL.revokeObjectURL(url);    
-  
 
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >

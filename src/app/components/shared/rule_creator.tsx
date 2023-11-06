@@ -37,7 +37,9 @@ export default function RuleCreator(
       </div>
       <div className="col-12 col-lg-3">
       <ColumnSelector 
+        isFormValid={obj.columnErrorMessage}
         handleRemovedCols={handleRemovedCols}
+        columnErrorMessage={obj.columnErrorMessage}
         isColumnDisabled={obj.isColumnDisabled} 
         selectedCols={obj.selectedCols} 
         handleSelectedCols={handleColSelection} 
