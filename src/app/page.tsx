@@ -239,7 +239,7 @@ export default function Page() {
     a.click();
   
     URL.revokeObjectURL(url);    
-  };
+  
 
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
@@ -269,4 +269,4 @@ export default function Page() {
     </div>
     
   );
-}
+      } 
