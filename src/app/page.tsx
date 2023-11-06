@@ -26,6 +26,45 @@ export default function Page() {
   let jsonStructure : {check : {[key: string]: any}} = {check: {}};
   let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
 
+  const isColumnSelectionvalidate = (obj: any) => {
+    if(!obj.isColumnDisabled) {
+      if((constants.list_column_column_assert_hint.includes(obj.selectedRule) 
+      && (obj.selectedCol.length != 2)) || (!constants.list_column_column_assert_hint.includes(obj.selectedRule) 
+      && (obj.selectedCol[0]).length == 0)) {
+        console.log("col false");
+        return false;
+      }else{
+        console.log("col col true");  
+        return true;
+      }
+    } else{
+      console.log("col true");
+      return true;
+    }
+  } 
+
+  const isAssertionvalidate = (obj: any) => {
+    if(obj.selectedOperator !== "None" && obj.selectedValue == null) {
+      console.log(obj.selectedOperator);
+      console.log("assertion false");
+      return false;
+    } else {
+      console.log("assertion true");
+      return true
+    };
+  } 
+  const isFormvalidate = () => {
+    let isFormValid = true;
+    listObj.forEach(obj => {
+      if (!isColumnSelectionvalidate(obj) || !isAssertionvalidate(obj)) {
+        console.log("form false");
+        isFormValid = false;
+      }
+    });
+
+    return isFormValid;
+  } 
+
   const handleSelectColumns = (selectedList: [{[key: string]: string}], index: any) => {
     const selectedCols = selectedList.map(obj => obj.key);
     const updatedListObject = [...listObj]
@@ -142,8 +181,9 @@ export default function Page() {
         finalJsonStructure.checks[numCheck]["check"]["columns"] = JSON.stringify(listObj[numCheck].selectedCol);
       } 
       else if (constants.list_column_column_assert_hint.includes(rule)){
-        finalJsonStructure.checks[numCheck]["check"]["columnA"] = listObj[numCheck].selectedCols[0];
-        finalJsonStructure.checks[numCheck]["check"]["columnB"] = listObj[numCheck].selectedCols[1];
+        console.log(listObj[numCheck].selectedCol);
+        finalJsonStructure.checks[numCheck]["check"]["columnA"] = listObj[numCheck].selectedCol[0];
+        finalJsonStructure.checks[numCheck]["check"]["columnB"] = listObj[numCheck].selectedCol[1];
       } 
       else{
         if (!constants.list_assert_hint.includes(rule)) {
@@ -161,23 +201,27 @@ export default function Page() {
   }
 
   function saveRulesToFile() {
-    const selectedRules = listObj.map(obj => obj.selectedRule);
-    writeRuleToRulesFile(selectedRules);
-    writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
+    if (isFormvalidate()) {
+          const selectedRules = listObj.map(obj => obj.selectedRule);
+          writeRuleToRulesFile(selectedRules);
+          writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
 
-    const jsonData = JSON.stringify(finalJsonStructure);
-  
-    const blob = new Blob([jsonData], { type: 'application/json' });
-  
-    const url = URL.createObjectURL(blob);
-  
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'rules.json';
-  
-    a.click();
-  
-    URL.revokeObjectURL(url);    
+          const jsonData = JSON.stringify(finalJsonStructure);
+        
+          const blob = new Blob([jsonData], { type: 'application/json' });
+        
+          const url = URL.createObjectURL(blob);
+        
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'rules.json';
+        
+          a.click();
+        
+          URL.revokeObjectURL(url); 
+      } else {
+        alert("vous n'avez pas remplit tous les champs !");
+    }   
   }
 
   return (
