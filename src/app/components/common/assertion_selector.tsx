@@ -6,17 +6,16 @@ export default function AssertionSelector(
     handleOperatorSelection, 
     handleValueSelection} : 
   {isDisabled : any, 
-    operatorSelection : any, 
     handleOperatorSelection : any, 
     handleValueSelection : any, 
-    valueSelection : any, 
     obj: any
   }) {
       
     return <>
       <div className="row">
-      <label className="text-center" htmlFor="assertion-select">Choose an assertion:</label>
-      {obj.assertionErrorMessage >= 1 ? <ErrorMessage message= {obj.assertionErrorMessage}></ErrorMessage> : "" }
+      <label className="text-center" htmlFor="assertion-select">Choose an assertion:
+      </label>
+      {obj.assertionErrorMessage.length > 1 ? <ErrorMessage message= {obj.assertionErrorMessage}></ErrorMessage> : "" }
         <div className="col">
                   <select className="form-select"  
                     onChange={handleOperatorSelection} 

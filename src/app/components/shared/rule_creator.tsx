@@ -50,8 +50,6 @@ export default function RuleCreator(
       <div className="col-12 col-lg-5">
         <AssertionSelector  
           obj={obj} 
-          operatorSelection={obj.selectedOperator} 
-          valueSelection={obj.selectedValue} 
           handleOperatorSelection={handleOperatorSelection} 
           handleValueSelection={handleValueSelection} 
           isDisabled={obj.isAssertion}/> 

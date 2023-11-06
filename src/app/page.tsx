@@ -15,7 +15,6 @@ export default function Page() {
     selectedAssertion : "",
     columnErrorMessage: "",
     assertionErrorMessage: "",
-    isFormValid: false,
     isValueDisabled: true,
     isAssertion: false,
     isColumnDisabled: false,
@@ -31,9 +30,9 @@ export default function Page() {
 
   const isColumnSelectionvalidate = (obj: any) => {
     if(!obj.isColumnDisabled) {
-      if((constants.list_column_column_assert_hint.includes(obj.selectedRule) 
-      && (obj.selectedCol.length != 2)) || (!constants.list_column_column_assert_hint.includes(obj.selectedRule) 
-      && (obj.selectedCol[0]).length == 0)) {
+      if((constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol.length != 2)) || 
+      (!constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol.length) == 0)||
+      (!constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol[0].length) == 0)) {
         return false;
       }else{
         return true;
@@ -44,7 +43,7 @@ export default function Page() {
   } 
 
   const isAssertionvalidate = (obj: any) => {
-    if(obj.selectedOperator !== "None" && obj.selectedValue == null) {
+    if((obj.selectedOperator !== "None" && obj.selectedValue == null) || (obj.selectedOperator !== "None" && obj.selectedValue == '')) {
       return false;
     } else {
       return true
@@ -53,17 +52,15 @@ export default function Page() {
   const isFormvalidate = () => {
     let isFormValid = true;
     let updatedListObject= [...listObj];
-    for (let i = 0; i < listObj.length; i++) {
-      if (!isColumnSelectionvalidate(listObj[i])) {
-        constants.list_column_column_assert_hint.includes(listObj[i].selectedRule) ? 
-        updatedListObject[i].columnErrorMessage = "excatement deux colonnes": 
-        updatedListObject[i].columnErrorMessage = "au moins une colonne";
+    for (let i = 0; i < updatedListObject.length; i++) {
+      if (!isColumnSelectionvalidate(updatedListObject[i])) {
+        constants.list_column_column_assert_hint.includes(updatedListObject[i].selectedRule) ? 
+        updatedListObject[i].columnErrorMessage = "deux colonnes": 
+        updatedListObject[i].columnErrorMessage = "une colonne";
         isFormValid = false;
-      } else if (!isAssertionvalidate(listObj[i])) {
+      } else if (!isAssertionvalidate(updatedListObject[i])) {
         updatedListObject[i].assertionErrorMessage = "un opérateur et une valeur";
         isFormValid = false;
-      } else {
-        updatedListObject[i].isFormValid = true;
       }
       setListObj(updatedListObject)
     }
@@ -74,12 +71,14 @@ export default function Page() {
     const selectedCols = selectedList.map(obj => obj.key);
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedCol = selectedCols;
+    updatedListObject[index].columnErrorMessage = "";
     setListObj(updatedListObject)
   };
 
   const handleSelectValue = (selected : any, index: any) => {
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedValue = selected.target.value;
+    updatedListObject[index].assertionErrorMessage = "";
     setListObj(updatedListObject)
   };
   
@@ -97,8 +96,10 @@ export default function Page() {
 
     if (constants.mandatory_assert.includes(rule)) {
       updatedListObject[index].isAssertionMandatory = true
+      // updatedListObject[index].isValueDisabled = false
     } else {
       updatedListObject[index].isAssertionMandatory = false
+      // updatedListObject[index].isValueDisabled = true
     }
 
 
@@ -128,6 +129,7 @@ export default function Page() {
     const updatedListObject = [...listObj]
 
     updatedListObject[index].selectedOperator = selected.target.value;
+    updatedListObject[index].assertionErrorMessage = "";
 
     if (updatedListObject[index].selectedOperator != "None") {      
       updatedListObject[index].isValueDisabled = false;
@@ -148,6 +150,18 @@ export default function Page() {
     setListObj(updatedListObject)
     
   };
+  // const handleRemovedOpt = (selected : any, index:any) => {
+  //   const updatedListObject = [...listObj];
+  //   updatedListObject[index].selectedOperator = selected;
+  //   setListObj(updatedListObject);
+    
+  // };
+  // const handleDeleteValue = (value : any, index:any) => {
+  //   const updatedListObject = [...listObj];
+  //   updatedListObject[index].selectedValue = value;
+  //   setListObj(updatedListObject);
+    
+  // };
 
   const addRule = () => {
     setListObj([...listObj, obj])
