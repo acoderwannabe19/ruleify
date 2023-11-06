@@ -46,7 +46,6 @@ export default function RuleCreator(
       /> 
       </div>
       <div className="col-12 col-lg-5">
-
         <AssertionSelector  
           obj={obj} 
           operatorSelection={obj.selectedOperator} 
