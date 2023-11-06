@@ -18,10 +18,8 @@
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('../app/assets/fonts/Montserrat/Montserrat-Light.ttf');
-  /* src: url('../asset/OpenSans/OpenSans-Medium.ttf'); */
-  /* font-weight: 400;
-  font-style: normal; */
+  src: url('../app/assets/fonts/Pathway/PathwayExtreme_14pt-Regular.ttf');
+  
   }
 
 body {
