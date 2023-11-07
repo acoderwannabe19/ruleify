@@ -74,17 +74,13 @@ export default function Page() {
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedCol = selectedCols;
 
-    if ((updatedListObject[index].selectedCol.length != 0 && !constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule)) || 
-      ((constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule) && updatedListObject[index].selectedCol.length == 2)) ||
-      (constants.list_assert_hint.includes(updatedListObject[index].selectedRule))
+    if (updatedListObject[index].selectedCol.length == 0 && !constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule) || 
+      (constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule) && updatedListObject[index].selectedCol.length != 2) ||
+      (!constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule) && updatedListObject[index].selectedCol[0].length == 0) 
       ) {
-      updatedListObject[index].isColumnValid = true;
-      // console.log("col true");
-      
-    } else {
       updatedListObject[index].isColumnValid = false;
-      // console.log("col false");
-      
+    } else {
+      updatedListObject[index].isColumnValid = true;
     }
     setListObj(updatedListObject)
   };
@@ -93,14 +89,13 @@ export default function Page() {
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedValue = selected.target.value;
 
-    if ((updatedListObject[index].selectedValue === null && updatedListObject[index].selectedOperator != "None")
+    if ((updatedListObject[index].selectedValue === null && updatedListObject[index].selectedOperator != "None") ||
+    (updatedListObject[index].selectedValue === "" && updatedListObject[index].selectedOperator != "None")
     ) {
       updatedListObject[index].isAssertionValid = false;
-      // console.log("ass false");
       
     } else {
       updatedListObject[index].isAssertionValid = true;
-      // console.log("ass true");
     }
     setListObj(updatedListObject)
 
@@ -251,15 +246,17 @@ export default function Page() {
         return false;
       }
     }
-    
     return true;
   }
   
 
   function saveRulesToFile() {
     // console.log(isFormValid());    
+    console.log(listObj[0]);
+
     if(isFormValid()){
           const selectedRules = listObj.map(obj => obj.selectedRule);
+          
           
             writeRuleToRulesFile(selectedRules);
             writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
