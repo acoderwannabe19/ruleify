@@ -13,6 +13,8 @@ export default function Page() {
     selectedOperator : "None",
     selectedValue : null,
     selectedAssertion : "",
+    columnErrorMessage: "",
+    assertionErrorMessage: "",
     isValueDisabled: true,
     isAssertion: false,
     isColumnDisabled: false,
@@ -28,40 +30,40 @@ export default function Page() {
 
   const isColumnSelectionvalidate = (obj: any) => {
     if(!obj.isColumnDisabled) {
-      if((constants.list_column_column_assert_hint.includes(obj.selectedRule) 
-      && (obj.selectedCol.length != 2)) || (!constants.list_column_column_assert_hint.includes(obj.selectedRule) 
-      && (obj.selectedCol[0]).length == 0)) {
-        console.log("col false");
+      if((constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol.length != 2)) || 
+      (!constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol.length) == 0)||
+      (!constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol[0].length) == 0)) {
         return false;
       }else{
-        console.log("col col true");  
         return true;
       }
     } else{
-      console.log("col true");
       return true;
     }
   } 
 
   const isAssertionvalidate = (obj: any) => {
-    if(obj.selectedOperator !== "None" && obj.selectedValue == null) {
-      console.log(obj.selectedOperator);
-      console.log("assertion false");
+    if((obj.selectedOperator !== "None" && obj.selectedValue == null) || (obj.selectedOperator !== "None" && obj.selectedValue == '')) {
       return false;
     } else {
-      console.log("assertion true");
       return true
     };
   } 
   const isFormvalidate = () => {
     let isFormValid = true;
-    listObj.forEach(obj => {
-      if (!isColumnSelectionvalidate(obj) || !isAssertionvalidate(obj)) {
-        console.log("form false");
+    let updatedListObject= [...listObj];
+    for (let i = 0; i < updatedListObject.length; i++) {
+      if (!isColumnSelectionvalidate(updatedListObject[i])) {
+        constants.list_column_column_assert_hint.includes(updatedListObject[i].selectedRule) ? 
+        updatedListObject[i].columnErrorMessage = "deux colonnes": 
+        updatedListObject[i].columnErrorMessage = "une colonne";
+        isFormValid = false;
+      } else if (!isAssertionvalidate(updatedListObject[i])) {
+        updatedListObject[i].assertionErrorMessage = "un opérateur et une valeur";
         isFormValid = false;
       }
-    });
-
+      setListObj(updatedListObject)
+    }
     return isFormValid;
   } 
 
@@ -69,12 +71,14 @@ export default function Page() {
     const selectedCols = selectedList.map(obj => obj.key);
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedCol = selectedCols;
+    updatedListObject[index].columnErrorMessage = "";
     setListObj(updatedListObject)
   };
 
   const handleSelectValue = (selected : any, index: any) => {
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedValue = selected.target.value;
+    updatedListObject[index].assertionErrorMessage = "";
     setListObj(updatedListObject)
   };
   
@@ -92,8 +96,10 @@ export default function Page() {
 
     if (constants.mandatory_assert.includes(rule)) {
       updatedListObject[index].isAssertionMandatory = true
+      // updatedListObject[index].isValueDisabled = false
     } else {
       updatedListObject[index].isAssertionMandatory = false
+      // updatedListObject[index].isValueDisabled = true
     }
 
 
@@ -123,6 +129,7 @@ export default function Page() {
     const updatedListObject = [...listObj]
 
     updatedListObject[index].selectedOperator = selected.target.value;
+    updatedListObject[index].assertionErrorMessage = "";
 
     if (updatedListObject[index].selectedOperator != "None") {      
       updatedListObject[index].isValueDisabled = false;
@@ -143,6 +150,18 @@ export default function Page() {
     setListObj(updatedListObject)
     
   };
+  // const handleRemovedOpt = (selected : any, index:any) => {
+  //   const updatedListObject = [...listObj];
+  //   updatedListObject[index].selectedOperator = selected;
+  //   setListObj(updatedListObject);
+    
+  // };
+  // const handleDeleteValue = (value : any, index:any) => {
+  //   const updatedListObject = [...listObj];
+  //   updatedListObject[index].selectedValue = value;
+  //   setListObj(updatedListObject);
+    
+  // };
 
   const addRule = () => {
     setListObj([...listObj, obj])
@@ -191,7 +210,7 @@ export default function Page() {
       }
       if (listObj[numCheck].selectedOperator != "None") {
         lambdaExpression = `lambda x : x ${listObj[numCheck].selectedOperator} ${listObj[numCheck].selectedValue}`;
-        finalJsonStructure.checks[numCheck]["check"]["assertion"] = JSON.stringify(lambdaExpression); 
+        finalJsonStructure.checks[numCheck]["check"]["assertion"] = lambdaExpression; 
       }
       if (listObj[numCheck].selectedOperator == "None" && !constants.mandatory_assert.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["assertion"] = "None"; 
@@ -218,28 +237,8 @@ export default function Page() {
           a.click();
         
           URL.revokeObjectURL(url); 
-      } else {
-        alert("vous n'avez pas remplit tous les champs !");
-    }   
+      } 
   }
-    // const selectedRules = listObj.map(obj => obj.selectedRule);
-
-    // writeRuleToRulesFile(selectedRules);
-    // writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
-
-    // const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
-  
-    // const blob = new Blob([jsonData], { type: 'application/json' });
-  
-    // const url = URL.createObjectURL(blob);
-  
-    // const a = document.createElement('a');
-    // a.href = url;
-    // a.download = 'rules.json';
-    // a.click();
-  
-    // URL.revokeObjectURL(url);    
-  
 
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
