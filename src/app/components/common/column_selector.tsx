@@ -1,14 +1,18 @@
 import Multiselect from "multiselect-react-dropdown";
 import React from "react";
-
+import ErrorMessage  from "./error_message";
 const ColumnSelector = (
   { options, 
+    columnErrorMessage,
+    isFormValid,
     noLimit, 
     selectedCols,  
     handleRemovedCols, 
     handleSelectedCols, 
     isColumnDisabled } : 
   { options: any; 
+    columnErrorMessage: any;
+    isFormValid: any;
     noLimit: any; 
     selectedCols: any; 
     handleSelectedCols: any; 
@@ -18,6 +22,7 @@ const ColumnSelector = (
   return (                                    
     <div >
       Choose column(s)
+      {isFormValid.length >=1 ? <ErrorMessage message= {columnErrorMessage}></ErrorMessage> : "" }
       <Multiselect
         disable={isColumnDisabled}
         closeIcon="circle"
