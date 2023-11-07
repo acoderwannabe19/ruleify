@@ -31,7 +31,7 @@ export default function Page() {
   let jsonStructure : {check : {[key: string]: any}} = {check: {}};
   let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
 
-  const isColumnSelectionvalidate = (obj: any) => {
+  const isColumnSelectionValid = (obj: any) => {
     if(!obj.isColumnDisabled) {
       if((constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol.length != 2)) || 
       (!constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol.length) == 0)||
@@ -46,23 +46,23 @@ export default function Page() {
   } 
 
 
-  const isAssertionvalidate = (obj: any) => {
+  const isAssertionValid = (obj: any) => {
     if((obj.selectedOperator !== "None" && obj.selectedValue == null) || (obj.selectedOperator !== "None" && obj.selectedValue == '')) {
       return false;
     } else {
       return true
     };
   } 
-  const isFormvalidate = () => {
+  const isFormValid = () => {
     let isFormValid = true;
     let updatedListObject= [...listObj];
     for (let i = 0; i < updatedListObject.length; i++) {
-      if (!isColumnSelectionvalidate(updatedListObject[i])) {
+      if (!isColumnSelectionValid(updatedListObject[i])) {
         constants.list_column_column_assert_hint.includes(updatedListObject[i].selectedRule) ? 
         updatedListObject[i].columnErrorMessage = "two columns": 
         updatedListObject[i].columnErrorMessage = "column (s)";
         isFormValid = false;
-      } else if (!isAssertionvalidate(updatedListObject[i])) {
+      } else if (!isAssertionValid(updatedListObject[i])) {
         updatedListObject[i].assertionErrorMessage = "an operator and a value";
         isFormValid = false;
       }
@@ -101,10 +101,10 @@ export default function Page() {
 
     if (constants.mandatory_assert.includes(rule)) {
       updatedListObject[index].isAssertionMandatory = true
-      // updatedListObject[index].isValueDisabled = false
+      updatedListObject[index].isValueDisabled = false
     } else {
       updatedListObject[index].isAssertionMandatory = false
-      // updatedListObject[index].isValueDisabled = true
+      updatedListObject[index].isValueDisabled = true
     }
 
     if (rule == "hasSize") {
@@ -227,7 +227,7 @@ export default function Page() {
 
   function saveRulesToFile() {
     // console.log(isFormValid());    
-    if(isFormvalidate()){
+    if(isFormValid()){
           const selectedRules = listObj.map(obj => obj.selectedRule);
           
             writeRuleToRulesFile(selectedRules);
