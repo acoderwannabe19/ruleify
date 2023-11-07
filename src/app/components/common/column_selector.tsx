@@ -1,6 +1,6 @@
 import Multiselect from "multiselect-react-dropdown";
 import React from "react";
-import ErrorMessage  from "./errorMessage";
+import ErrorMessage  from "./error_message";
 const ColumnSelector = (
   { options, 
     columnErrorMessage,
