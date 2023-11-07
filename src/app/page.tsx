@@ -96,10 +96,10 @@ export default function Page() {
 
     if (constants.mandatory_assert.includes(rule)) {
       updatedListObject[index].isAssertionMandatory = true
-      // updatedListObject[index].isValueDisabled = false
+      updatedListObject[index].isValueDisabled = false
     } else {
       updatedListObject[index].isAssertionMandatory = false
-      // updatedListObject[index].isValueDisabled = true
+      updatedListObject[index].isValueDisabled = true
     }
 
 
