@@ -37,7 +37,9 @@ export default function RuleCreator(
       </div>
       <div className="col-12 col-lg-3">
       <ColumnSelector 
+        isFormValid={obj.columnErrorMessage}
         handleRemovedCols={handleRemovedCols}
+        columnErrorMessage={obj.columnErrorMessage}
         isColumnDisabled={obj.isColumnDisabled} 
         selectedCols={obj.selectedCols} 
         handleSelectedCols={handleColSelection} 
@@ -48,8 +50,6 @@ export default function RuleCreator(
       <div className="col-12 col-lg-5">
         <AssertionSelector  
           obj={obj} 
-          operatorSelection={obj.selectedOperator} 
-          valueSelection={obj.selectedValue} 
           handleOperatorSelection={handleOperatorSelection} 
           handleValueSelection={handleValueSelection} 
           isDisabled={obj.isAssertion}/> 
