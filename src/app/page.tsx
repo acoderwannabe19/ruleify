@@ -210,7 +210,7 @@ export default function Page() {
       }
       if (listObj[numCheck].selectedOperator != "None") {
         lambdaExpression = `lambda x : x ${listObj[numCheck].selectedOperator} ${listObj[numCheck].selectedValue}`;
-        finalJsonStructure.checks[numCheck]["check"]["assertion"] = JSON.stringify(lambdaExpression); 
+        finalJsonStructure.checks[numCheck]["check"]["assertion"] = lambdaExpression; 
       }
       if (listObj[numCheck].selectedOperator == "None" && !constants.mandatory_assert.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["assertion"] = "None"; 
@@ -237,9 +237,7 @@ export default function Page() {
           a.click();
         
           URL.revokeObjectURL(url); 
-      } else {
-        alert("vous n'avez pas remplit tous les champs !");
-    }   
+      } 
   }
 
   return (
