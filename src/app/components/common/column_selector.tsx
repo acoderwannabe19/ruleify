@@ -17,8 +17,7 @@ const ColumnSelector = (
     selectedCols: any; 
     handleSelectedCols: any; 
     isColumnDisabled : any; 
-    handleRemovedCols:any}) => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+    handleRemovedCols:any}) => {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
   return (                                    
     <div >
       Choose column(s)
