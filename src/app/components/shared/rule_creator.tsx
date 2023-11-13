@@ -54,7 +54,7 @@ export default function RuleCreator(
           handleValueSelection={handleValueSelection} 
           isDisabled={obj.isAssertion}/> 
       </div>
-      <div className="col-2 col-lg-1 m-auto ">
+      <div className="col-2 col-lg-1 mx-auto mt-4 ">
         <button onClick={handleDeletion}  className="btn btn-outline-danger " style={{}}><i className="bi bi-trash3"></i></button>
       </div>
     </div>
