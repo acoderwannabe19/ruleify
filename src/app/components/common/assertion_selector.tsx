@@ -1,4 +1,4 @@
-import ErrorMessage  from "./errorMessage";
+import ErrorMessage  from "./error_message";
 
 export default function AssertionSelector(
   {isDisabled, 

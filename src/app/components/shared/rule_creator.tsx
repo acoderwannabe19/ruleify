@@ -5,10 +5,14 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import ColumnSelector from "../common/column_selector";
 import AssertionSelector from "../common/assertion_selector";
 import RuleSelector from "../common/rule_selector";
+import AllowedValuesInput from "../common/allowed_values_input"
+import DataTypeSelector from "../common/datatype_selector"
 
 
 export default function RuleCreator(
   {columns, 
+    handleAllowedValuesInput,
+    handleDatatypeSelection,
     handleColSelection, 
     handleRuleSelection, 
     handleDeletion,
@@ -18,6 +22,8 @@ export default function RuleCreator(
     componentKey, 
     obj}: 
     {columns: any, handleColSelection: any, 
+      handleAllowedValuesInput: any,
+      handleDatatypeSelection: any,
       handleOperatorSelection : any, 
       handleValueSelection : any, 
       handleRuleSelection : any, 
@@ -47,14 +53,21 @@ export default function RuleCreator(
         options={columns} 
       /> 
       </div>
-      <div className="col-12 col-lg-5">
+      <div className={obj.selectedRule === 'isContainedIn' ||  obj.selectedRule === 'hasDataType'? 'col-12 col-lg-3' : 'col-12 col-lg-5'}>
         <AssertionSelector  
           obj={obj} 
           handleOperatorSelection={handleOperatorSelection} 
           handleValueSelection={handleValueSelection} 
           isDisabled={obj.isAssertion}/> 
       </div>
-      <div className="col-2 col-lg-1 m-auto ">
+        {obj.selectedRule=='isContainedIn' && <div className='col-12 col-lg-2'> <AllowedValuesInput
+          obj={obj}
+          handleAllowedValuesInput={handleAllowedValuesInput} 
+          /></div>}
+        {obj.selectedRule=='hasDataType' && <div className='col-12 col-lg-2'><DataTypeSelector  
+          handleDatatypeSelection={handleDatatypeSelection} 
+          /></div>}
+      <div className="col-2 col-lg-1 mx-auto mt-4 ">
         <button onClick={handleDeletion}  className="btn btn-outline-danger " style={{}}><i className="bi bi-trash3"></i></button>
       </div>
     </div>
