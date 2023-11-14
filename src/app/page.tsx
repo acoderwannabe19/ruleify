@@ -45,7 +45,6 @@ export default function Page() {
     }
   } 
 
-
   const isAssertionValid = (obj: any) => {
     if((obj.selectedOperator !== "None" && obj.selectedValue == null) || (obj.selectedOperator !== "None" && obj.selectedValue == '')) {
       return false;
@@ -53,6 +52,7 @@ export default function Page() {
       return true
     };
   } 
+
   const isFormValid = () => {
     let isFormValid = true;
     let updatedListObject= [...listObj];
@@ -165,7 +165,7 @@ export default function Page() {
     setListObj(updatedListObject)
     
   };
- 
+
   const addRule = () => {
     setListObj([...listObj, obj])
     setRuleCount(ruleCount + 1);
@@ -221,12 +221,9 @@ export default function Page() {
         finalJsonStructure.checks[numCheck]["check"]["assertion"] = "None"; 
       }
     }
-  };
-
-  
+  };  
 
   function saveRulesToFile() {
-    // console.log(isFormValid());    
     if(isFormValid()){
           const selectedRules = listObj.map(obj => obj.selectedRule);
           

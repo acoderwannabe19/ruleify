@@ -26,7 +26,6 @@ export default function RuleCreator(
       obj:any, 
       handleRemovedCols:any}) {
 
-
   return <div id={componentKey} className="m-4">
     <div className="row " >
       <div className="col-12 col-lg-3">
@@ -54,7 +53,7 @@ export default function RuleCreator(
           handleValueSelection={handleValueSelection} 
           isDisabled={obj.isAssertion}/> 
       </div>
-      <div className="col-2 col-lg-1 mx-auto mt-4 ">
+      <div className="col-2 col-lg-1 m-auto ">
         <button onClick={handleDeletion}  className="btn btn-outline-danger " style={{}}><i className="bi bi-trash3"></i></button>
       </div>
     </div>
