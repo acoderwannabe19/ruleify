@@ -15,6 +15,9 @@ export default function Page() {
     selectedAssertion : "",
     columnErrorMessage: "",
     assertionErrorMessage: "",
+    allowedValuesErrorMessage: "",
+    allowedValues: Array.from(""),
+    datatype: "Numeric",
     isValueDisabled: true,
     isAssertion: false,
     isColumnDisabled: false,
@@ -52,6 +55,14 @@ export default function Page() {
       return true
     };
   } 
+  const isAllowedValuesValid = (obj: any) => {
+    if(constants.list_column_allowed_values_assert_hint.includes(obj.selectedRule) && 
+    (obj.allowedValues.length === 0 || obj.allowedValues[0]===0)) {
+      return false;
+    } else {
+      return true;
+    };
+  }  
 
   const isFormValid = () => {
     let isFormValid = true;
@@ -59,11 +70,14 @@ export default function Page() {
     for (let i = 0; i < updatedListObject.length; i++) {
       if (!isColumnSelectionValid(updatedListObject[i])) {
         constants.list_column_column_assert_hint.includes(updatedListObject[i].selectedRule) ? 
-        updatedListObject[i].columnErrorMessage = "two columns": 
-        updatedListObject[i].columnErrorMessage = "column (s)";
+        updatedListObject[i].columnErrorMessage = "*Please choose two columns": 
+        updatedListObject[i].columnErrorMessage = "*Please choose column (s)";
         isFormValid = false;
       } else if (!isAssertionValid(updatedListObject[i])) {
-        updatedListObject[i].assertionErrorMessage = "an operator and a value";
+        updatedListObject[i].assertionErrorMessage = "*Please choose an operator and a value";
+        isFormValid = false;
+      } else if (!isAllowedValuesValid(updatedListObject[i])) {
+        updatedListObject[i].allowedValuesErrorMessage = "*Please enter and separate values by semi-colon";
         isFormValid = false;
       }
       setListObj(updatedListObject)
@@ -84,7 +98,24 @@ export default function Page() {
     updatedListObject[index].selectedValue = selected.target.value;
     updatedListObject[index].assertionErrorMessage = "";
     setListObj(updatedListObject)
-
+  };
+  
+  const handleAllowedValuesInput = (selected : any, index: any) => {
+    let updatedListObject = [...listObj];
+    selected = selected.target.value;
+    if(!selected.includes(' ') && !selected.includes(',') && !selected.includes('_') &&
+    !selected.includes(':') && !selected.includes('/') && !selected.includes("\\")) {
+      updatedListObject[index].allowedValues = selected.split(";");
+    }else {
+      updatedListObject[index].allowedValues = Array.from('');
+    }
+    updatedListObject[index].allowedValuesErrorMessage = "";
+    setListObj(updatedListObject);
+  };
+  const handleDatatypeSelection = (selected : any, index: any) => {
+    const updatedListObject = [...listObj]
+    updatedListObject[index].datatype = selected.target.value;
+    setListObj(updatedListObject)
   };
   
   const handleSelectRule = (selected : any, index: any) => {
@@ -204,7 +235,6 @@ export default function Page() {
         finalJsonStructure.checks[numCheck]["check"]["columns"] = JSON.stringify(listObj[numCheck].selectedCol);
       } 
       else if (constants.list_column_column_assert_hint.includes(rule)){
-        console.log(listObj[numCheck].selectedCol);
         finalJsonStructure.checks[numCheck]["check"]["columnA"] = listObj[numCheck].selectedCol[0];
         finalJsonStructure.checks[numCheck]["check"]["columnB"] = listObj[numCheck].selectedCol[1];
       } 
@@ -212,6 +242,12 @@ export default function Page() {
         if (!constants.list_assert_hint.includes(rule)) {
           finalJsonStructure.checks[numCheck]["check"]["column"] = listObj[numCheck].selectedCol[0];
         } 
+      }
+      if (constants.list_column_allowed_values_assert_hint.includes(rule)) {
+        finalJsonStructure.checks[numCheck]["check"]["allowed_values"] = JSON.stringify(listObj[numCheck].allowedValues)
+      }
+      if (constants.list_column_datatype_assert_hint.includes(rule)) {
+        finalJsonStructure.checks[numCheck]["check"]["datatype"] = JSON.stringify(listObj[numCheck].datatype)
       }
       if (listObj[numCheck].selectedOperator != "None") {
         lambdaExpression = `lambda x : x ${listObj[numCheck].selectedOperator} ${listObj[numCheck].selectedValue}`;
@@ -253,6 +289,8 @@ export default function Page() {
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
         <RuleCreator 
+        handleAllowedValuesInput={(selected:any) => handleAllowedValuesInput(selected, index)}
+        handleDatatypeSelection={(selected:any) => handleAllowedValuesInput(selected, index)}
         handleRemovedCols={(selected:any) =>handleRemovedCol(selected, index)} 
         handleDeletion={() => deleteRule(index)} 
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} 
