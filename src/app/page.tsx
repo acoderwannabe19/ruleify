@@ -9,7 +9,7 @@ export default function Page() {
 
   const obj = {
     selectedCol : [""],
-    selectedRule : "areComplete",
+    selectedRule : "areAnyComplete",
     selectedOperator : "None",
     selectedValue : null,
     selectedAssertion : "",
@@ -70,14 +70,14 @@ export default function Page() {
     for (let i = 0; i < updatedListObject.length; i++) {
       if (!isColumnSelectionValid(updatedListObject[i])) {
         constants.list_column_column_assert_hint.includes(updatedListObject[i].selectedRule) ? 
-        updatedListObject[i].columnErrorMessage = "*Please choose two columns": 
-        updatedListObject[i].columnErrorMessage = "*Please choose column (s)";
+        updatedListObject[i].columnErrorMessage = "*Please choose two columns!": 
+        updatedListObject[i].columnErrorMessage = "*Please choose column (s)!";
         isFormValid = false;
       } else if (!isAssertionValid(updatedListObject[i])) {
-        updatedListObject[i].assertionErrorMessage = "*Please choose an operator and a value";
+        updatedListObject[i].assertionErrorMessage = "*Please choose an operator and a value!";
         isFormValid = false;
       } else if (!isAllowedValuesValid(updatedListObject[i])) {
-        updatedListObject[i].allowedValuesErrorMessage = "*Please enter and separate values by semi-colon";
+        updatedListObject[i].allowedValuesErrorMessage = "*Please enter and separate values by semi-colon!";
         isFormValid = false;
       }
       setListObj(updatedListObject)
