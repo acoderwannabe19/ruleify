@@ -1,9 +1,9 @@
 export const rules_list = [
     "areAnyComplete", "areComplete", "containsCreditCardNumber", "containsEmail", 
     "containsSocialSecurityNumber", "containsURL", "hasApproxCountDistinct", 
-    "hasApproxQuantile", "hasCompleteness", "hasCorrelation", "hasDataType", 
-    "hasEntropy", "hasHistogramValues", "hasMax", "hasMean", "hasMin", 
-    "hasMinLength", "hasMutualInformation", "hasNumberOfDistinctValues", 
+    "hasCompleteness", "hasCorrelation", "hasDataType", 
+    "hasEntropy", "hasMax", "hasMean", "hasMin", 
+    "hasMinLength", "hasMutualInformation",  
     "hasPattern", "hasSize", "hasStandardDeviation", "hasSum", 
     "hasUniqueValueRatio", "hasUniqueness", "isContainedIn", "isComplete", 
     "isGreaterThanOrEqualTo", "isGreaterThan", "isLessThan", "isLessThanOrEqualTo", 

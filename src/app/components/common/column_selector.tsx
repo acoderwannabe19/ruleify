@@ -13,7 +13,7 @@ const ColumnSelector = (
   { options: any; 
     columnErrorMessage: any;
     isFormValid: any;
-    noLimit: any; 
+    noLimit: any;
     selectedCols: any; 
     handleSelectedCols: any; 
     isColumnDisabled : any; 
