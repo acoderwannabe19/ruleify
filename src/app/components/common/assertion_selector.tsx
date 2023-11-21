@@ -29,7 +29,7 @@ export default function AssertionSelector(
                     <option> &gt;= </option>
                     <option> &lt; </option>
                     <option> &lt;= </option>
-                    <option> = </option>
+                    <option> == </option>
                   </select>
                 </div>
                 <div className="col">
