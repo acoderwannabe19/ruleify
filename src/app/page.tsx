@@ -9,10 +9,17 @@ export default function Page() {
 
   const obj = {
     selectedCol : [""],
-    selectedRule : "areComplete",
+    selectedRule : "areAnyComplete",
     selectedOperator : "None",
     selectedValue : null,
     selectedAssertion : "",
+    columnErrorMessage: "",
+    assertionErrorMessage: "",
+    allowedValuesErrorMessage: "",
+    patternErrorMessage: "",
+    allowedValues: Array.from(""),
+    pattern: "",
+    datatype: "Numeric",
     isValueDisabled: true,
     isAssertion: false,
     isColumnDisabled: false,
@@ -29,76 +36,100 @@ export default function Page() {
   let jsonStructure : {check : {[key: string]: any}} = {check: {}};
   let finalJsonStructure : {"checks" : any[]} = {"checks" : []};
 
-  // const isColumnSelectionvalidate = (obj: any) => {
-  //   if(!obj.isColumnDisabled) {
-  //     if((constants.list_column_column_assert_hint.includes(obj.selectedRule) 
-  //     && (obj.selectedCol.length != 2)) || (!constants.list_column_column_assert_hint.includes(obj.selectedRule) 
-  //     && (obj.selectedCol[0]).length == 0)) {
-  //       console.log("col false");
-  //       return false;
-  //     }else{
-  //       console.log("col col true");  
-  //       return true;
-  //     }
-  //   } else{
-  //     console.log("col true");
-  //     return true;
-  //   }
-  // } 
+  const isColumnSelectionValid = (obj: any) => {
+    if(!obj.isColumnDisabled) {
+      if((constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol.length != 2)) || 
+      (!constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol.length) == 0)||
+      (!constants.list_column_column_assert_hint.includes(obj.selectedRule) && (obj.selectedCol[0].length) == 0)) {
+        return false;
+      }else{
+        return true;
+      }
+    } else{
+      return true;
+    }
+  } 
 
-  // const isAssertionvalidate = (obj: any) => {
-  //   if(obj.selectedOperator !== "None" && obj.selectedValue == null) {
-  //     console.log(obj.selectedOperator);
-  //     console.log("assertion false");
-  //     return false;
-  //   } else {
-  //     console.log("assertion true");
-  //     return true
-  //   };
-  // } 
+  const isAssertionValid = (obj: any) => {
+    if((obj.selectedOperator !== "None" && obj.selectedValue == null) || (obj.selectedOperator !== "None" && obj.selectedValue == '')) {
+      return false;
+    } else {
+      return true
+    };
+  } 
+  const isAllowedValuesValid = (obj: any) => {
+    if(constants.list_column_allowed_values_assert_hint.includes(obj.selectedRule) && 
+    (obj.allowedValues.length === 0 || obj.allowedValues[0]===0)) {
+      return false;
+    } else {
+      return true;
+    };
+  }  
 
-  // const isFormvalidate = () => {
-  //   let isFormValid = true;
-  //   listObj.forEach(obj => {
-  //     if (!isColumnSelectionvalidate(obj) || !isAssertionvalidate(obj)) {
-  //       console.log("form false");
-  //       isFormValid = false;
-  //     }
-  //   });
+  const isPatternValid = (obj: any) => {
+    if(obj.pattern == '') {
+      return false;
+    } else {
+      return true;
+    };
+  }
 
-  //   return isFormValid;
-  // } 
+  const isFormValid = () => {
+    let isFormValid = true;
+    let updatedListObject= [...listObj];
+    for (let i = 0; i < updatedListObject.length; i++) {
+      if (!isColumnSelectionValid(updatedListObject[i])) {
+        constants.list_column_column_assert_hint.includes(updatedListObject[i].selectedRule) ? 
+        updatedListObject[i].columnErrorMessage = "*Please choose two columns!": 
+        updatedListObject[i].columnErrorMessage = "*Please choose column (s)!";
+        isFormValid = false;
+      } else if (!isAssertionValid(updatedListObject[i])) {
+        updatedListObject[i].assertionErrorMessage = "*Please choose an operator and a value!";
+        isFormValid = false;
+      } else if (!isAllowedValuesValid(updatedListObject[i])) {
+        updatedListObject[i].allowedValuesErrorMessage = "*Please enter and separate values by semi-colon!";
+        isFormValid = false;
+      } else if (!isPatternValid(updatedListObject[i])) {
+        updatedListObject[i].patternErrorMessage = "*Please enter a valid pattern!";
+        isFormValid = false;
+      }
+      setListObj(updatedListObject)
+    }
+    return isFormValid;
+  } 
 
   const handleSelectColumns = (selectedList: [{[key: string]: string}], index: any) => {
     const selectedCols = selectedList.map(obj => obj.key);
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedCol = selectedCols;
-
-    if (updatedListObject[index].selectedCol.length == 0 && !constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule) || 
-      (constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule) && updatedListObject[index].selectedCol.length != 2) ||
-      (!constants.list_column_column_assert_hint.includes(updatedListObject[index].selectedRule) && updatedListObject[index].selectedCol[0].length == 0) 
-      ) {
-      updatedListObject[index].isColumnValid = false;
-    } else {
-      updatedListObject[index].isColumnValid = true;
-    }
+    updatedListObject[index].columnErrorMessage = "";
     setListObj(updatedListObject)
   };
 
   const handleSelectValue = (selected : any, index: any) => {
     const updatedListObject = [...listObj]
     updatedListObject[index].selectedValue = selected.target.value;
-
-    if ((updatedListObject[index].selectedValue === null && updatedListObject[index].selectedOperator != "None") ||
-    (updatedListObject[index].selectedValue === "" && updatedListObject[index].selectedOperator != "None")
-    ) {
-      updatedListObject[index].isAssertionValid = false;
-      
-    } else {
-      updatedListObject[index].isAssertionValid = true;
-    }
+    updatedListObject[index].assertionErrorMessage = "";
     setListObj(updatedListObject)
+  };
+  
+  const handleAllowedValuesInput = (selected : any, index: any) => {
+    let updatedListObject = [...listObj];
+    selected = selected.target.value;
+    if(!selected.includes(' ') && !selected.includes(',') && !selected.includes('_') &&
+    !selected.includes(':') && !selected.includes('/') && !selected.includes("\\")) {
+      updatedListObject[index].allowedValues = selected.split(";");
+    }else {
+      updatedListObject[index].allowedValues = Array.from('');
+    }
+    updatedListObject[index].allowedValuesErrorMessage = "";
+    setListObj(updatedListObject);
+  };
 
+  const handleDatatypeSelection = (selected : any, index: any) => {
+    const updatedListObject = [...listObj]
+    updatedListObject[index].datatype = selected.target.value;
+    setListObj(updatedListObject)
   };
   
   const handleSelectRule = (selected : any, index: any) => {
@@ -115,8 +146,10 @@ export default function Page() {
 
     if (constants.mandatory_assert.includes(rule)) {
       updatedListObject[index].isAssertionMandatory = true
+      updatedListObject[index].isValueDisabled = false
     } else {
       updatedListObject[index].isAssertionMandatory = false
+      updatedListObject[index].isValueDisabled = true
     }
 
     if (rule == "hasSize") {
@@ -145,6 +178,7 @@ export default function Page() {
     const updatedListObject = [...listObj]
 
     updatedListObject[index].selectedOperator = selected.target.value;
+    updatedListObject[index].assertionErrorMessage = "";
 
     if (updatedListObject[index].selectedOperator != "None") {
       updatedListObject[index].isValueDisabled = false
@@ -176,6 +210,16 @@ export default function Page() {
     setListObj(updatedListObject)
     
   };
+
+
+  const handleSelectPattern = (selected : any, index:any) => {
+    let updatedListObject = [...listObj];
+    selected = selected.target.value;
+    updatedListObject[index].pattern = selected
+    setListObj(updatedListObject)
+
+
+  }
 
   const addRule = () => {
     setListObj([...listObj, obj])
@@ -215,7 +259,6 @@ export default function Page() {
         finalJsonStructure.checks[numCheck]["check"]["columns"] = JSON.stringify(listObj[numCheck].selectedCol);
       } 
       else if (constants.list_column_column_assert_hint.includes(rule)){
-        console.log(listObj[numCheck].selectedCol);
         finalJsonStructure.checks[numCheck]["check"]["columnA"] = listObj[numCheck].selectedCol[0];
         finalJsonStructure.checks[numCheck]["check"]["columnB"] = listObj[numCheck].selectedCol[1];
       } 
@@ -224,36 +267,27 @@ export default function Page() {
           finalJsonStructure.checks[numCheck]["check"]["column"] = listObj[numCheck].selectedCol[0];
         } 
       }
+      if (constants.list_column_allowed_values_assert_hint.includes(rule)) {
+        finalJsonStructure.checks[numCheck]["check"]["allowed_values"] = JSON.stringify(listObj[numCheck].allowedValues)
+      }
+      if (rule == "hasPattern") {
+        finalJsonStructure.checks[numCheck]["check"]["pattern"] = "r" + JSON.stringify(listObj[numCheck].pattern)
+      }
+      if (constants.list_column_datatype_assert_hint.includes(rule)) {
+        finalJsonStructure.checks[numCheck]["check"]["datatype"] = JSON.stringify(listObj[numCheck].datatype)
+      }
       if (listObj[numCheck].selectedOperator != "None") {
         lambdaExpression = `lambda x : x ${listObj[numCheck].selectedOperator} ${listObj[numCheck].selectedValue}`;
-        finalJsonStructure.checks[numCheck]["check"]["assertion"] = JSON.stringify(lambdaExpression); 
+        finalJsonStructure.checks[numCheck]["check"]["assertion"] = lambdaExpression; 
       }
       if (listObj[numCheck].selectedOperator == "None" && !constants.mandatory_assert.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["assertion"] = "None"; 
       }
     }
-  };
-
-  const isFormValid = () => {
-    for (const obj of listObj) {
-      if (obj.isAssertionValid == true && obj.isColumnValid == true) {
-        obj.isRuleValid = true;
-      } else {
-        obj.isRuleValid = false;
-      }
-      if (obj.isRuleValid === false) {
-        console.log("nope");
-        return false;
-      }
-    }
-    return true;
-  }
-  
+  };  
 
   function saveRulesToFile() {
     // console.log(isFormValid());    
-    console.log(listObj[0]);
-
     if(isFormValid()){
           const selectedRules = listObj.map(obj => obj.selectedRule);
           
@@ -261,25 +295,21 @@ export default function Page() {
             writeRuleToRulesFile(selectedRules);
             writeColumnsAndAssertToRulesFile(listObj, finalJsonStructure);
 
-            const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
-          
-            const blob = new Blob([jsonData], { type: 'application/json' });
-          
-            const url = URL.createObjectURL(blob);
-          
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'rules.json';
-          
-            a.click();
-          
-            URL.revokeObjectURL(url); 
-    } else {
-      alert("Please make sure all rules are valid before downloading the file.");
-    }
-      
-
-  }  
+          const jsonData = JSON.stringify(finalJsonStructure, null, "\t");
+        
+          const blob = new Blob([jsonData], { type: 'application/json' });
+        
+          const url = URL.createObjectURL(blob);
+        
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'rules.json';
+        
+          a.click();
+        
+          URL.revokeObjectURL(url); 
+      } 
+  }
 
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
@@ -288,12 +318,15 @@ export default function Page() {
       <UploadDataFile onListChange={setList} />
       {Array.from({ length: ruleCount }).map((_, index) => (
         <RuleCreator 
+        handleAllowedValuesInput={(selected:any) => handleAllowedValuesInput(selected, index)}
+        handleDatatypeSelection={(selected:any) => handleAllowedValuesInput(selected, index)}
         handleRemovedCols={(selected:any) =>handleRemovedCol(selected, index)} 
         handleDeletion={() => deleteRule(index)} 
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} 
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 
         handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  
         handleColSelection={(selectedList:any) => handleSelectColumns(selectedList, index)}
+        handlePatternSelection={(selectedList:any) => handleSelectPattern(selectedList, index)}
         key={index} 
         columns={list} 
         componentKey={index}      
@@ -308,5 +341,4 @@ export default function Page() {
       </div>
     </div>
     
-  );
-      } 
+    ) } 
