@@ -9,7 +9,7 @@ export default function DataTypeSelector(
       
     return <>
       <div className="row">
-      <label className="text-center" htmlFor="assertion-select">datatype:
+      <label className="text-center" htmlFor="assertion-select">Datatype:
       </label>
         <div className="col">
                   <select className="form-select"  

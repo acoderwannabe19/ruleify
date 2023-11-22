@@ -16,7 +16,9 @@ export default function Page() {
     columnErrorMessage: "",
     assertionErrorMessage: "",
     allowedValuesErrorMessage: "",
+    patternErrorMessage: "",
     allowedValues: Array.from(""),
+    pattern: "",
     datatype: "Numeric",
     isValueDisabled: true,
     isAssertion: false,
@@ -64,6 +66,14 @@ export default function Page() {
     };
   }  
 
+  const isPatternValid = (obj: any) => {
+    if(obj.pattern == '') {
+      return false;
+    } else {
+      return true;
+    };
+  }
+
   const isFormValid = () => {
     let isFormValid = true;
     let updatedListObject= [...listObj];
@@ -78,6 +88,9 @@ export default function Page() {
         isFormValid = false;
       } else if (!isAllowedValuesValid(updatedListObject[i])) {
         updatedListObject[i].allowedValuesErrorMessage = "*Please enter and separate values by semi-colon!";
+        isFormValid = false;
+      } else if (!isPatternValid(updatedListObject[i])) {
+        updatedListObject[i].patternErrorMessage = "*Please enter a valid pattern!";
         isFormValid = false;
       }
       setListObj(updatedListObject)
@@ -112,6 +125,7 @@ export default function Page() {
     updatedListObject[index].allowedValuesErrorMessage = "";
     setListObj(updatedListObject);
   };
+
   const handleDatatypeSelection = (selected : any, index: any) => {
     const updatedListObject = [...listObj]
     updatedListObject[index].datatype = selected.target.value;
@@ -197,6 +211,16 @@ export default function Page() {
     
   };
 
+
+  const handleSelectPattern = (selected : any, index:any) => {
+    let updatedListObject = [...listObj];
+    selected = selected.target.value;
+    updatedListObject[index].pattern = selected
+    setListObj(updatedListObject)
+
+
+  }
+
   const addRule = () => {
     setListObj([...listObj, obj])
     setRuleCount(ruleCount + 1);
@@ -245,6 +269,9 @@ export default function Page() {
       }
       if (constants.list_column_allowed_values_assert_hint.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["allowed_values"] = JSON.stringify(listObj[numCheck].allowedValues)
+      }
+      if (rule == "hasPattern") {
+        finalJsonStructure.checks[numCheck]["check"]["pattern"] = "r" + JSON.stringify(listObj[numCheck].pattern)
       }
       if (constants.list_column_datatype_assert_hint.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["datatype"] = JSON.stringify(listObj[numCheck].datatype)
@@ -297,6 +324,7 @@ export default function Page() {
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 
         handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  
         handleColSelection={(selectedList:any) => handleSelectColumns(selectedList, index)}
+        handlePatternSelection={(selectedList:any) => handleSelectPattern(selectedList, index)}
         key={index} 
         columns={list} 
         componentKey={index}      
