@@ -16,7 +16,7 @@ export default function Page() {
     columnErrorMessage: "",
     assertionErrorMessage: "",
     allowedValuesErrorMessage: "",
-    patternErrorMessage: "",
+    // patternErrorMessage: "",
     allowedValues: Array.from(""),
     pattern: "",
     datatype: "Numeric",
@@ -161,7 +161,7 @@ export default function Page() {
 
     if (constants.list_column_hint.includes(rule) || constants.list_column_assert_binning_udf_max_bin_hint.includes(rule) || 
     constants.list_column_assert_hint.includes(rule) || constants.list_column_datatype_assert_hint.includes(rule) || 
-    constants.list_column_quantile_assert_hint.includes(rule) || constants.list_column_pattern_assert_name_hint.includes(rule) || 
+    constants.list_column_quantile_assert_hint.includes(rule) || 
     constants.list_column_allowed_values_assert_hint.includes(rule)
     ) {
       updatedListObject[index].noLimit = 1;
@@ -327,7 +327,7 @@ export default function Page() {
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 
         handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  
         handleColSelection={(selectedList:any) => handleSelectColumns(selectedList, index)}
-        handlePatternSelection={(selectedList:any) => handleSelectPattern(selectedList, index)}
+        // handlePatternSelection={(selectedList:any) => handleSelectPattern(selectedList, index)}
         key={index} 
         columns={list} 
         componentKey={index}      

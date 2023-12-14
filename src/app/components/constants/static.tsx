@@ -4,7 +4,7 @@ export const rules_list = [
     "hasCompleteness", "hasCorrelation", "hasDataType", 
     "hasEntropy", "hasMax", "hasMean", "hasMin", 
     "hasMinLength", "hasMutualInformation",  
-    "hasPattern", "hasSize", "hasStandardDeviation", "hasSum", 
+    , "hasSize", "hasStandardDeviation", "hasSum", 
     "hasUniqueValueRatio", "hasUniqueness", "isContainedIn", "isComplete", 
     "isGreaterThanOrEqualTo", "isGreaterThan", "isLessThan", "isLessThanOrEqualTo", 
     "isNonNegative", "isPositive", "isUnique", "haveAnyCompleteness", 
@@ -42,7 +42,7 @@ export const list_column_column_assert_hint = [
 
 export const list_column_allowed_values_assert_hint = ["isContainedIn"]
 
-export const list_column_pattern_assert_name_hint = ["hasPattern"]
+export const list_column_pattern_assert_name_hint = []
 
 export const list_column_datatype_assert_hint = ["hasDataType"]
 
@@ -86,7 +86,6 @@ export const function_descriptions: FunctionDescriptions = {
     "isLessThan": "Vérifie si la valeur d'une colonne numérique est inférieure à une valeur donnée.",
     "isLessThanOrEqualTo": "Vérifie si la valeur d'une colonne numérique est inférieure ou égale à une valeur donnée.",
     "isContainedIn": "Vérifie si les valeurs d'une colonne sont contenues dans un ensemble spécifié.",
-    "hasPattern": "Vérifie si les valeurs d'une colonne de type String correspondent à un modèle régulier.",
     "hasDataType": "Vérifie le type de données d'une colonne.",
     "hasHistogramValues": "Vérifie si les valeurs d'une colonne numérique correspondent à un histogramme spécifié.",
     "hasNumberOfDistinctValues": "Vérifie si le nombre distinct de valeurs d'une colonne est égal à une valeur donnée."

@@ -20,12 +20,12 @@ export default function RuleCreator(
     handleRemovedCols,
     handleOperatorSelection, 
     handleValueSelection, 
-    handlePatternSelection,
+    // handlePatternSelection,
     componentKey, 
     obj}: 
     {columns: any, handleColSelection: any, 
       handleAllowedValuesInput: any,
-      handlePatternSelection: any,
+      // handlePatternSelection: any,
       handleDatatypeSelection: any,
       handleOperatorSelection : any, 
       handleValueSelection : any, 
@@ -55,7 +55,7 @@ export default function RuleCreator(
         options={columns} 
       /> 
       </div>
-      <div className={obj.selectedRule === 'isContainedIn' || obj.selectedRule === 'hasPattern' || obj.selectedRule === 'hasDataType'? 'col-12 col-lg-3' : 'col-12 col-lg-5'}>
+      <div className={obj.selectedRule === 'isContainedIn' || obj.selectedRule === 'hasDataType'? 'col-12 col-lg-3' : 'col-12 col-lg-5'}>
         <AssertionSelector  
           obj={obj} 
           handleOperatorSelection={handleOperatorSelection} 
@@ -69,10 +69,10 @@ export default function RuleCreator(
         {obj.selectedRule=='hasDataType' && <div className='col-12 col-lg-2'><DataTypeSelector  
           handleDatatypeSelection={handleDatatypeSelection} 
           /></div>}
-           {obj.selectedRule=='hasPattern' && <div className='col-12 col-lg-2'><PatternSelector
+           {/* {obj.selectedRule=='hasPattern' && <div className='col-12 col-lg-2'><PatternSelector
            obj={obj}
           handlePatternSelection={handlePatternSelection} 
-          /></div>}
+          /></div>} */}
       <div className="col-2 col-lg-1 mx-auto mt-4 ">
         <button onClick={handleDeletion}  className="btn btn-outline-danger"><i className="bi bi-trash3"></i></button>
       </div>
