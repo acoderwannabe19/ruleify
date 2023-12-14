@@ -89,10 +89,11 @@ export default function Page() {
       } else if (!isAllowedValuesValid(updatedListObject[i])) {
         updatedListObject[i].allowedValuesErrorMessage = "*Please enter and separate values by semi-colon!";
         isFormValid = false;
-      } else if (!isPatternValid(updatedListObject[i])) {
-        updatedListObject[i].patternErrorMessage = "*Please enter a valid pattern!";
-        isFormValid = false;
-      }
+      } 
+      // else if (!isPatternValid(updatedListObject[i])) {
+      //   updatedListObject[i].patternErrorMessage = "*Please enter a valid pattern!";
+      //   isFormValid = false;
+      // }
       setListObj(updatedListObject)
     }
     return isFormValid;
@@ -270,9 +271,9 @@ export default function Page() {
       if (constants.list_column_allowed_values_assert_hint.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["allowed_values"] = JSON.stringify(listObj[numCheck].allowedValues)
       }
-      if (rule == "hasPattern") {
-        finalJsonStructure.checks[numCheck]["check"]["pattern"] = "r" + JSON.stringify(listObj[numCheck].pattern)
-      }
+      // if (rule == "hasPattern") {
+      //   finalJsonStructure.checks[numCheck]["check"]["pattern"] = "r" + JSON.stringify(listObj[numCheck].pattern)
+      // }
       if (constants.list_column_datatype_assert_hint.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["datatype"] = JSON.stringify(listObj[numCheck].datatype)
       }
