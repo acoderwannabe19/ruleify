@@ -1,9 +1,11 @@
 'use client'
 import React, { useState } from "react";
 import UploadDataFile from "./components/shared/upload_data_file";
+import UploadRemoteDataFile from "./components/shared/upload_remote_data_file";
 import "bootstrap/dist/css/bootstrap.css";
 import RuleCreator from "./components/shared/rule_creator";
 import * as constants from './components/constants/static';
+import { Client } from 'ssh2';
 
 export default function Page() {
 
@@ -276,6 +278,8 @@ export default function Page() {
       // }
       if (constants.list_column_datatype_assert_hint.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["datatype"] = JSON.stringify(listObj[numCheck].datatype)
+        console.log(JSON.stringify(listObj[numCheck].datatype));
+        
       }
       if (listObj[numCheck].selectedOperator != "None") {
         lambdaExpression = `lambda x : x ${listObj[numCheck].selectedOperator} ${listObj[numCheck].selectedValue}`;
@@ -312,15 +316,85 @@ export default function Page() {
       } 
   }
 
+  // sshService.js
+// const Client = require('ssh2').Client;
+
+// async function connectToSSHServer() {
+//   return new Promise((resolve, reject) => {
+//     const conn = new Client();
+    
+//     conn.on('ready', () => {
+//       console.log('SSH connection established');
+//       resolve(conn);
+//     });
+    
+//     conn.on('error', (err: any) => {
+//       console.error('Error connecting via SSH:', err);
+//       reject(err);
+//     });
+    
+//     conn.connect({
+//         host: 'ar1.vpnjantit.com',
+//         port: 22,
+//         username: 'awa-vpnjantit.com',
+//         password: 'awa', // or use privateKey instead for key-based authentication
+//       // Add more options if needed (privateKey, passphrase, etc.)
+//     });
+//   });
+// }
+
+
+// async function connectToSSHServer() {
+//   const conn = new Client();
+
+//   try {
+//     await new Promise<void>((resolve, reject) => {
+//       conn.on('ready', () => {
+//         console.log('SSH connection established');
+//         resolve();
+//       });
+
+//       conn.on('error', (err: any) => {
+//         console.error('Error:', err);
+//         reject(err);
+//       });
+
+//       conn.connect({
+//         host: 'ar1.vpnjantit.com',
+//         port: 22,
+//         username: 'awa-vpnjantit.com',
+//         password: 'awa', // or use privateKey instead for key-based authentication
+//       });
+//     });
+
+//     // If the connection is successful, log 'ok'
+//     console.log('Connection is ok!');
+//   } catch (error) {
+//     // If there's an error in connecting, log 'nooooo'
+//     console.error('Connection failed:', error);
+//     console.log('Noooo');
+//   } finally {
+//     conn.end(); // Close the connection
+//   }
+// }
+
+// // Call the function to connect
+// connectToSSHServer();
+
+
+  
+
+
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
       <title>Ruleify</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
+      {/* <UploadRemoteDataFile handleURLSelection={setList} /> */}
       {Array.from({ length: ruleCount }).map((_, index) => (
         <RuleCreator 
         handleAllowedValuesInput={(selected:any) => handleAllowedValuesInput(selected, index)}
-        handleDatatypeSelection={(selected:any) => handleAllowedValuesInput(selected, index)}
+        handleDatatypeSelection={(selected:any) => handleDatatypeSelection(selected, index)}
         handleRemovedCols={(selected:any) =>handleRemovedCol(selected, index)} 
         handleDeletion={() => deleteRule(index)} 
         handleRuleSelection={(selected:any) =>handleSelectRule(selected, index)} 
@@ -338,7 +412,9 @@ export default function Page() {
         <button className="btn btn-outline-success m-3" onClick={addRule}>
           + Add a rule
         </button>
-        <button  onClick={saveRulesToFile} className="btn btn-outline-success m-3">Save rules file</button>
+        <button  onClick={saveRulesToFile} className="btn btn-outline-success m-3">Save locally</button>
+        {/* <button  onClick={connectToSSHServer} className="btn btn-outline-success m-3">Save to remote server</button> */}
+        {/* <SaveToRemoteServer /> */}
       </div>
     </div>
     
