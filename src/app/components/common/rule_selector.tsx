@@ -16,7 +16,7 @@ export default function RuleSelector(
           id=""
         >
           {constants.rules_list && constants.rules_list.map((item, index) => (
-              <option title={constants.function_descriptions[item]} key={index} value={item}>{item}</option>
+              <option title={constants.function_descriptions[item!]} key={index} value={item}>{item}</option>
             ))}        
         </select>
     </>
