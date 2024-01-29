@@ -279,7 +279,6 @@ export default function Page() {
       // }
       if (constants.list_column_datatype_assert_hint.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["datatype"] = listObj[numCheck].datatype
-        // console.log(JSON.stringify(listObj[numCheck].datatype));
         
       }
       if (listObj[numCheck].selectedOperator != "None") {
