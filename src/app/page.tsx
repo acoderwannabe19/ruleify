@@ -133,6 +133,7 @@ export default function Page() {
     const updatedListObject = [...listObj]
     updatedListObject[index].datatype = selected.target.value;
     setListObj(updatedListObject)
+    
   };
   
   const handleSelectRule = (selected : any, index: any) => {
@@ -277,8 +278,8 @@ export default function Page() {
       //   finalJsonStructure.checks[numCheck]["check"]["pattern"] = "r" + JSON.stringify(listObj[numCheck].pattern)
       // }
       if (constants.list_column_datatype_assert_hint.includes(rule)) {
-        finalJsonStructure.checks[numCheck]["check"]["datatype"] = JSON.stringify(listObj[numCheck].datatype)
-        console.log(JSON.stringify(listObj[numCheck].datatype));
+        finalJsonStructure.checks[numCheck]["check"]["datatype"] = listObj[numCheck].datatype
+        // console.log(JSON.stringify(listObj[numCheck].datatype));
         
       }
       if (listObj[numCheck].selectedOperator != "None") {
