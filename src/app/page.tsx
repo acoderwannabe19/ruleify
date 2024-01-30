@@ -142,7 +142,7 @@ export default function Page() {
     updatedListObject[index].selectedRule = selected.target.value;
 
     const rule = selected.target.value;
-    if (constants.list_column_hint.includes(rule)) {
+    if (constants.list_column_hint.includes(rule) || constants.list_columns.includes(rule)) {
       updatedListObject[index].isAssertion = true
     } else {
       updatedListObject[index].isAssertion = false
