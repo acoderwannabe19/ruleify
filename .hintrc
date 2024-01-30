@@ -8,6 +8,19 @@
       {
         "button-name": "off"
       }
+<<<<<<< HEAD
     ]
+=======
+    ],
+    "axe/forms": [
+      "default",
+      {
+        "label": "off",
+        "select-name": "off"
+      }
+    ],
+    "typescript-config/is-valid": "off",
+    "no-inline-styles": "off"
+>>>>>>> d5ed001677ffdb74115e3d0f9ebf3e97d5a6587c
   }
 }
