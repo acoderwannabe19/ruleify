@@ -5,7 +5,6 @@ import UploadRemoteDataFile from "./components/shared/upload_remote_data_file";
 import "bootstrap/dist/css/bootstrap.css";
 import RuleCreator from "./components/shared/rule_creator";
 import * as constants from './components/constants/static';
-import { Client } from 'ssh2';
 
 export default function Page() {
 
@@ -18,7 +17,6 @@ export default function Page() {
     columnErrorMessage: "",
     assertionErrorMessage: "",
     allowedValuesErrorMessage: "",
-    // patternErrorMessage: "",
     allowedValues: Array.from(""),
     pattern: "",
     datatype: "Numeric",
@@ -68,14 +66,7 @@ export default function Page() {
     };
   }  
 
-  const isPatternValid = (obj: any) => {
-    if(obj.pattern == '') {
-      return false;
-    } else {
-      return true;
-    };
-  }
-
+  
   const isFormValid = () => {
     let isFormValid = true;
     let updatedListObject= [...listObj];
@@ -92,10 +83,7 @@ export default function Page() {
         updatedListObject[i].allowedValuesErrorMessage = "*Please enter and separate values by semi-colon!";
         isFormValid = false;
       } 
-      // else if (!isPatternValid(updatedListObject[i])) {
-      //   updatedListObject[i].patternErrorMessage = "*Please enter a valid pattern!";
-      //   isFormValid = false;
-      // }
+      
       setListObj(updatedListObject)
     }
     return isFormValid;
@@ -193,11 +181,9 @@ export default function Page() {
     if ((updatedListObject[index].selectedValue == null && updatedListObject[index].selectedOperator != "None")
     ) {
       updatedListObject[index].isAssertionValid = false;
-      // console.log("ass false");
       
     } else {
       updatedListObject[index].isAssertionValid = true;
-      // console.log("ass true");
     }
 
     setListObj(updatedListObject)    
@@ -215,16 +201,7 @@ export default function Page() {
     
   };
 
-
-  const handleSelectPattern = (selected : any, index:any) => {
-    let updatedListObject = [...listObj];
-    selected = selected.target.value;
-    updatedListObject[index].pattern = selected
-    setListObj(updatedListObject)
-
-
-  }
-
+  
   const addRule = () => {
     setListObj([...listObj, obj])
     setRuleCount(ruleCount + 1);
@@ -274,9 +251,7 @@ export default function Page() {
       if (constants.list_column_allowed_values_assert_hint.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["allowed_values"] = JSON.stringify(listObj[numCheck].allowedValues)
       }
-      // if (rule == "hasPattern") {
-      //   finalJsonStructure.checks[numCheck]["check"]["pattern"] = "r" + JSON.stringify(listObj[numCheck].pattern)
-      // }
+      
       if (constants.list_column_datatype_assert_hint.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["datatype"] = listObj[numCheck].datatype
         
@@ -295,7 +270,6 @@ export default function Page() {
   };  
 
   function saveRulesToFile() {
-    // console.log(isFormValid());    
     if(isFormValid()){
           const selectedRules = listObj.map(obj => obj.selectedRule);
           
@@ -318,82 +292,12 @@ export default function Page() {
           URL.revokeObjectURL(url); 
       } 
   }
-
-  // sshService.js
-// const Client = require('ssh2').Client;
-
-// async function connectToSSHServer() {
-//   return new Promise((resolve, reject) => {
-//     const conn = new Client();
-    
-//     conn.on('ready', () => {
-//       console.log('SSH connection established');
-//       resolve(conn);
-//     });
-    
-//     conn.on('error', (err: any) => {
-//       console.error('Error connecting via SSH:', err);
-//       reject(err);
-//     });
-    
-//     conn.connect({
-//         host: 'ar1.vpnjantit.com',
-//         port: 22,
-//         username: 'awa-vpnjantit.com',
-//         password: 'awa', // or use privateKey instead for key-based authentication
-//       // Add more options if needed (privateKey, passphrase, etc.)
-//     });
-//   });
-// }
-
-
-// async function connectToSSHServer() {
-//   const conn = new Client();
-
-//   try {
-//     await new Promise<void>((resolve, reject) => {
-//       conn.on('ready', () => {
-//         console.log('SSH connection established');
-//         resolve();
-//       });
-
-//       conn.on('error', (err: any) => {
-//         console.error('Error:', err);
-//         reject(err);
-//       });
-
-//       conn.connect({
-//         host: 'ar1.vpnjantit.com',
-//         port: 22,
-//         username: 'awa-vpnjantit.com',
-//         password: 'awa', // or use privateKey instead for key-based authentication
-//       });
-//     });
-
-//     // If the connection is successful, log 'ok'
-//     console.log('Connection is ok!');
-//   } catch (error) {
-//     // If there's an error in connecting, log 'nooooo'
-//     console.error('Connection failed:', error);
-//     console.log('Noooo');
-//   } finally {
-//     conn.end(); // Close the connection
-//   }
-// }
-
-// // Call the function to connect
-// connectToSSHServer();
-
-
-  
-
-
   return (
     <div className="p-5" style={{fontFamily: 'Montserrat'}} >
       <title>Ruleify</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <UploadDataFile onListChange={setList} />
-      {/* <UploadRemoteDataFile handleURLSelection={setList} /> */}
+      
       {Array.from({ length: ruleCount }).map((_, index) => (
         <RuleCreator 
         handleAllowedValuesInput={(selected:any) => handleAllowedValuesInput(selected, index)}
@@ -404,7 +308,6 @@ export default function Page() {
         handleValueSelection={(selected:any) =>handleSelectValue(selected, index)} 
         handleOperatorSelection={(selected:any) =>handleSelectOperator(selected, index)}  
         handleColSelection={(selectedList:any) => handleSelectColumns(selectedList, index)}
-        // handlePatternSelection={(selectedList:any) => handleSelectPattern(selectedList, index)}
         key={index} 
         columns={list} 
         componentKey={index}      
@@ -416,8 +319,6 @@ export default function Page() {
           + Add a rule
         </button>
         <button  onClick={saveRulesToFile} className="btn btn-outline-success m-3">Save locally</button>
-        {/* <button  onClick={connectToSSHServer} className="btn btn-outline-success m-3">Save to remote server</button> */}
-        {/* <SaveToRemoteServer /> */}
       </div>
     </div>
     
