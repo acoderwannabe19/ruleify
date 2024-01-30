@@ -150,9 +150,8 @@ export default function Page() {
       updatedListObject[index].isColumnDisabled = false
     }
 
-    if (constants.list_column_hint.includes(rule) || constants.list_column_assert_binning_udf_max_bin_hint.includes(rule) || 
+    if (constants.list_column_hint.includes(rule)  || 
     constants.list_column_assert_hint.includes(rule) || constants.list_column_datatype_assert_hint.includes(rule) || 
-    constants.list_column_quantile_assert_hint.includes(rule) || 
     constants.list_column_allowed_values_assert_hint.includes(rule)
     ) {
       updatedListObject[index].noLimit = 1;

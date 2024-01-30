@@ -39,7 +39,6 @@ export const list_column_column_assert_hint = [
 
 export const list_column_allowed_values_assert_hint = ["isContainedIn"]
 
-export const list_column_pattern_assert_name_hint = []
 
 export const list_column_datatype_assert_hint = ["hasDataType"]
 
