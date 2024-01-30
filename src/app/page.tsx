@@ -288,6 +288,9 @@ export default function Page() {
       if (listObj[numCheck].selectedOperator == "None" && !constants.mandatory_assert.includes(rule)) {
         finalJsonStructure.checks[numCheck]["check"]["assertion"] = "None"; 
       }
+      if (constants.list_column_hint.includes(rule)) {
+        delete finalJsonStructure.checks[numCheck]["check"].assertion
+      }
     }
   };  
 
