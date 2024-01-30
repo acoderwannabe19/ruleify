@@ -1,6 +1,5 @@
 export const rules_list = [
-    "areAnyComplete", "areComplete", "containsCreditCardNumber", "containsEmail", 
-    "containsSocialSecurityNumber", "containsURL", "hasApproxCountDistinct", 
+    "areAnyComplete", "areComplete", "containsEmail", "containsURL", "hasApproxCountDistinct", 
     "hasCompleteness", "hasCorrelation", "hasDataType", 
     "hasEntropy", "hasMax", "hasMean", "hasMin", 
     "hasMinLength", "hasMutualInformation",  
@@ -13,8 +12,8 @@ export const rules_list = [
 
 
 export const mandatory_assert = [
-    "hasApproxCountDistinct", "hasApproxQuantile", "hasCompleteness", "hasCorrelation", "hasDistinctness", "hasEntropy",
-    "hasHistogramValues", "hasMax", "hasMaxLength", "hasMean", "hasMean", "hasMin", "hasMinLength", "hasMutualInformation", 
+    "hasApproxCountDistinct", "hasCompleteness", "hasCorrelation", "hasEntropy",
+    "hasMax", "hasMaxLength", "hasMean", "hasMean", "hasMin", "hasMinLength", "hasMutualInformation", 
     "hasNumberOfDistinctValues", "hasSize", "hasStandardDeviation", "hasSum", "hasUniqueValueRatio", "hasUniqueness",
     "haveCompleteness", "haveAnyCompleteness"
 ]
@@ -22,20 +21,18 @@ export const mandatory_assert = [
 export const list_columns = ["areComplete", "areAnyComplete"]
 
 export const list_column_assert_hint = [
-    "hasApproxCountDistinct", "containsURL", "containsSocialSecurityNumber", "containsEmail",
-    "containsCreditCardNumber", "hasCompleteness", "hasEntropy", "hasMax", "hasMaxLength", "hasMean",
+    "hasApproxCountDistinct", "containsURL", "containsEmail",
+    "hasCompleteness", "hasEntropy", "hasMax", "hasMaxLength", "hasMean",
     "hasMin", "hasMinLength", "hasStandardDeviation", "hasSum", "isPositive", "isNonNegative"
 ]
 
 export const list_columns_assert_hint = [
-    "haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio", "hasDistinctness"
+    "haveCompleteness", "haveAnyCompleteness", "hasUniqueness", "hasUniqueValueRatio"
 ]
 
 export const list_column_hint = ["isUnique", "isComplete"]
 
 export const list_assert_hint = ["hasSize"]
-
-export const list_column_quantile_assert_hint = ["hasApproxQuantile"]
 
 export const list_column_column_assert_hint = [
     "hasCorrelation", "hasMutualInformation", "isGreaterThan", "isGreaterThanOrEqualTo", "isLessThan", "isLessThanOrEqualTo"]
@@ -46,7 +43,6 @@ export const list_column_pattern_assert_name_hint = []
 
 export const list_column_datatype_assert_hint = ["hasDataType"]
 
-export const list_column_assert_binning_udf_max_bin_hint = ["hasHistogramValues", "hasNumberOfDistinctValues"]
 
 interface FunctionDescriptions {
     [key: string]: string;
@@ -57,9 +53,7 @@ interface FunctionDescriptions {
     "areAnyComplete": "Checks if at least one of the specified columns is complete.",
     "hasApproxCountDistinct": "Checks if the distinct count of a column is approximately equal to a given value.",
     "containsURL": "Checks if a column contains URLs.",
-    "containsSocialSecurityNumber": "Checks if a column contains Social Security numbers.",
     "containsEmail": "Checks if a column contains email addresses.",
-    "containsCreditCardNumber": "Checks if a column contains credit card numbers.",
     "hasCompleteness": "Checks the completeness of a column.",
     "hasEntropy": "Checks the entropy of a column.",
     "hasMax": "Checks if the maximum value of a column is equal to a given value.",
@@ -78,7 +72,6 @@ interface FunctionDescriptions {
     "isUnique": "Checks if all values in a column are unique.",
     "isComplete": "Checks if all specified columns in a set are complete.",
     "hasSize": "Checks if the number of elements in a set is equal to a given value.",
-    "hasApproxQuantile": "Checks if the approximate quantile of a numeric column is equal to a given value.",
     "hasCorrelation": "Checks the correlation between two numeric columns.",
     "hasMutualInformation": "Checks the mutual information between two columns.",
     "isGreaterThan": "Checks if the value of a numeric column is greater than a given value.",
@@ -87,8 +80,7 @@ interface FunctionDescriptions {
     "isLessThanOrEqualTo": "Checks if the value of a numeric column is less than or equal to a given value.",
     "isContainedIn": "Checks if the values of a column are contained in a specified set.",
     "hasDataType": "Checks the data type of a column.",
-    "hasHistogramValues": "Checks if the values of a numeric column match a specified histogram.",
-    "hasNumberOfDistinctValues": "Checks if the number of distinct values in a column is equal to a given value."
+    
 }
 
 
